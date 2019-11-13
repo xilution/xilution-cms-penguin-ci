@@ -1,0 +1,43 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ProductName:
+    Type: String
+  Environment:
+    Type: String
+
+Conditions:
+  CreateTestResources: !Equals [ !Ref Environment, test ]
+
+Resources:
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${ProductName}-data-${Environment}'
+      VersioningConfiguration:
+        Status: Enabled
+
+  HostingBucketPolicyTest:
+    Type: AWS::S3::BucketPolicy
+    Condition: CreateTestResources
+    Properties:
+      Bucket: !Ref DataBucket
+      PolicyDocument:
+        Statement:
+          - Action: s3:*
+            Effect: Allow
+            Resource:
+              -
+                Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref DataBucket
+                    - '/*'
+              -
+                Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref DataBucket
+            Principal:
+              AWS: 'arn:aws:iam::952573012699:role/xilution-developer-role'
