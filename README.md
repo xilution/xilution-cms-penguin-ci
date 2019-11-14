@@ -4,3 +4,7 @@
 
 1. Install [Terraform](https://www.terraform.io/)
 1. Install [Kubeval](https://kubeval.instrumenta.dev/installation/)
+
+## Reference
+
+* https://github.com/terraform-aws-modules/terraform-aws-eks

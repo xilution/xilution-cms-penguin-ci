@@ -1,5 +1,45 @@
 include ./config.mk
 
+clean:
+	rm -rf .terraform *.tfstate*
+
+clean-test:
+	aws s3 rm s3://$(PRODUCT_NAME)-data-test --recursive --profile xilution-test
+
+clean-prod:
+	aws s3 rm s3://$(PRODUCT_NAME)-data-prod --recursive --profile xilution-prod
+
+k8s-diff:
+	kubectl diff -k ./k8s
+
+k8s-apply:
+	kubectl apply -k ./k8s
+
+k8s-delete:
+	kubectl delete -k ./k8s
+
+cluster-plan:
+	terraform plan \
+		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
+		./terraform/cluster
+
+cluster-apply:
+	terraform apply \
+		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
+		./terraform/cluster
+
+cluster-destroy:
+	terraform destroy \
+		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
+		./terraform/cluster
+
+cluster-init:
+	aws eks update-kubeconfig \
+		--region us-east-1 \
+		--name xilution-k8s \
+		--profile xilution-prod
+	kubectl apply -f config-map-aws-auth_xilution-k8s.yaml
+
 build:
 	@echo "nothing to do"
 
@@ -16,7 +56,8 @@ deploy-test:
 		--exclude "dev-ops/*" \
 		--exclude "k8s/.gitignore" \
 		--exclude "k8s/kustomization.yaml" \
-		--exclude "terraform/.gitignore" \
+		--exclude "terraform/cluster/.terraform/*" \
+		--exclude "terraform/cluster/.gitignore" \
 		--exclude ".gitignore" \
 		--exclude "config.mk" \
 		--exclude "makefile" \
@@ -31,7 +72,7 @@ deprovision-test:
 	aws cloudformation delete-stack --stack-name $(PRODUCT_NAME)-s3 --profile xilution-test
 
 init:
-	terraform init ./terraform
+	terraform init ./terraform/cluster
 
 provision-prod:
 	aws cloudformation create-stack --stack-name $(PRODUCT_NAME)-s3 \
