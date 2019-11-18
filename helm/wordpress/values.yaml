@@ -1,0 +1,7 @@
+database:
+  password: cXdlcnR5
+
+wordpress:
+  image:
+    repository: wordpress
+    tag: latest
