@@ -1,5 +1,9 @@
 database:
-  password: cXdlcnR5
+  name: wordpress
+  username: wordpress
+  password: d29yZHByZXNz
+  host: wordpress-mysql
+  port: 3306
 
 wordpress:
   image:

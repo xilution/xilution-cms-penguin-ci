@@ -22,3 +22,13 @@ output "region" {
   description = "AWS region."
   value = var.region
 }
+
+output "db_host" {
+  description = "Wordpress Database Host"
+  value = aws_rds_cluster.aurora.endpoint
+}
+
+output "db_port" {
+  description = "Wordpress Database Port"
+  value = aws_rds_cluster.aurora.port
+}

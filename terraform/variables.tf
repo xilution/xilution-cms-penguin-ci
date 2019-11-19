@@ -21,8 +21,14 @@ variable "network_stack_name" {
   default = "xilution-aws-network"
 }
 
-variable "cluster_role" {
+variable "master_username" {
   type = string
-  description = "The Cluster Role"
-  default = "xilution-lambda-execution-role"
+  description = "The Database Username"
+  default = "wordpress"
+}
+
+variable "master_password" {
+  type = string
+  description = "The Database Password"
+  default = "wordpress"
 }

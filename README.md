@@ -10,4 +10,3 @@
 * https://github.com/terraform-aws-modules/terraform-aws-eks
 * https://github.com/helm/helm/issues/5100
 * https://aws.amazon.com/premiumsupport/knowledge-center/eks-pods-efs/
-    * https://github.com/kubernetes-incubator/external-storage/tree/master/aws/efs
