@@ -48,23 +48,22 @@ destroy-test:
 		-auto-approve
 
 init-prod:
-	aws eks update-kubeconfig \
-		--region us-east-1 \
-		--name xilution-k8s \
-		--profile xilution-prod
+	aws eks update-kubeconfig --region us-east-1 --name xilution-k8s --profile xilution-prod
 	kubectl apply -f config-map-aws-auth_xilution-k8s.yaml
+	kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
 
 init-test:
-	aws eks update-kubeconfig \
-		--region us-east-1 \
-		--name xilution-k8s \
-		--profile xilution-test
+	aws eks update-kubeconfig --region us-east-1 --name xilution-k8s --profile xilution-test
 	kubectl apply -f config-map-aws-auth_xilution-k8s.yaml
+	kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
 
 output:
-	terraform output -json | jq '. | { database: { host: .db_host.value } }' > ../output/database.json
-	yq r ../output/database.json > ../output/database.yaml
-	rm -rf ../output/database.json
+	terraform output -json | jq '. | { mysql: { host: .db_host.value } }' > ../output/aurora.json
+	yq r ../output/aurora.json > ../output/aurora.yaml
+	rm -rf ../output/aurora.json
+	terraform output -json | jq '. | { efs : { fileSystemId: .efs_file_system_id.value } }' > ../output/efs.json
+	yq r ../output/efs.json > ../output/efs.yaml
+	rm -rf ../output/efs.json
 
 init:
 	terraform init -backend-config="key=path/to/state"

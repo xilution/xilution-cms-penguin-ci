@@ -4,7 +4,8 @@ wordpress-release:
 	helm upgrade \
 		--install \
 		--force \
-		--values ../output/database.yaml \
+		--values ../output/aurora.yaml \
+		--values ../output/efs.yaml \
 		--values ../output/image.yaml \
 		wordpress ./wordpress
 

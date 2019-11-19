@@ -1,11 +1,14 @@
-database:
+mysql:
   name: wordpress
   username: wordpress
   password: d29yZHByZXNz
-  host: wordpress-mysql
+  host: replace-me
   port: 3306
 
 wordpress:
   image:
     repository: wordpress
     tag: latest
+
+efs:
+  fileSystemId: replace-me

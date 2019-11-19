@@ -1,30 +1,3 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: wordpress
-  labels:
-    app: wordpress
-spec:
-  ports:
-    - port: 80
-  selector:
-    app: wordpress
-    tier: frontend
-  type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: wp-pv-claim
-  labels:
-    app: wordpress
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 20Gi
----
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
@@ -49,13 +22,13 @@ spec:
           name: wordpress
           env:
             - name: WORDPRESS_DB_HOST
-              value: "{{ .Values.database.host }}"
+              value: "{{ .Values.mysql.host }}"
             - name: WORDPRESS_DB_PORT
-              value: "{{ .Values.database.port }}"
+              value: "{{ .Values.mysql.port }}"
             - name: WORDPRESS_DB_NAME
-              value: "{{ .Values.database.name }}"
+              value: "{{ .Values.mysql.name }}"
             - name: WORDPRESS_DB_USER
-              value: "{{ .Values.database.username }}"
+              value: "{{ .Values.mysql.username }}"
             - name: WORDPRESS_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -68,6 +41,6 @@ spec:
             - name: wordpress-persistent-storage
               mountPath: /var/www/html
       volumes:
-        - name: wordpress-persistent-storage
+        - name: persistent-storage
           persistentVolumeClaim:
-          claimName: wp-pv-claim
+            claimName: efs-claim

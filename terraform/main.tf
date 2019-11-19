@@ -39,8 +39,7 @@ resource "aws_security_group" "mount_target_security_group" {
     protocol = "tcp"
     to_port = 2049
     cidr_blocks = [
-      data.aws_subnet.public_subnet_1.cidr_block,
-      data.aws_subnet.public_subnet_2.cidr_block
+      data.aws_vpc.vpc.cidr_block
     ]
   }
   egress {
@@ -77,8 +76,7 @@ resource "aws_security_group" "mysql_security_group" {
     protocol = "tcp"
     to_port = 3306
     cidr_blocks = [
-      data.aws_subnet.public_subnet_1.cidr_block,
-      data.aws_subnet.public_subnet_2.cidr_block
+      data.aws_vpc.vpc.cidr_block
     ]
   }
   egress {

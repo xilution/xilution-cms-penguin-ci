@@ -13,3 +13,17 @@
 * https://aws.amazon.com/about-aws/whats-new/2019/09/amazon-eks-announces-beta-release-of-amazon-efs-csi-driver/
 * https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html
 * https://github.com/kubernetes-sigs/aws-efs-csi-driver
+
+## Infrastructure
+
+See: [Infrastructure Readme](./terraform/README.md)
+
+## Deploy
+
+See: [Deploy Readme](./helm/README.md)
+
+## To Verify
+
+```
+make verify
+```

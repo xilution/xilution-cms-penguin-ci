@@ -32,3 +32,8 @@ output "db_port" {
   description = "Wordpress Database Port"
   value = aws_rds_cluster.aurora.port
 }
+
+output "efs_file_system_id" {
+  description = "Amazon EFS file system ID"
+  value = aws_efs_file_system.nfs.id
+}
