@@ -98,6 +98,7 @@ resource "aws_rds_cluster" "aurora" {
   master_password = var.master_password
   backup_retention_period = 1
   db_subnet_group_name = aws_db_subnet_group.aurora.name
+  skip_final_snapshot = true
   vpc_security_group_ids = [
     aws_security_group.mysql_security_group.id
   ]
