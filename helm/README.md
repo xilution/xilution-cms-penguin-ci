@@ -10,6 +10,7 @@ make verify
 
 ```
 cd helm
+export XILUTION_PENGUIN_INSTANCE_ID=5f3a3e4255234706a6fae7db5f3983e1
 make clean
 make init-{test|prod}
 make release-wordpress

@@ -10,7 +10,7 @@ release-wordpress:
 		--values ../output-infrastructure/aurora.yaml \
 		--values ../output-infrastructure/efs.yaml \
 		--values ../output-build/image.yaml \
-		wordpress ./wordpress
+		wordpress-$(XILUTION_PENGUIN_INSTANCE_ID) ./wordpress
 
 delete-wordpress:
 	helm delete wordpress

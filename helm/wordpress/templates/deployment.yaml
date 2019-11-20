@@ -40,6 +40,7 @@ spec:
           volumeMounts:
             - name: persistent-storage
               mountPath: /var/www/html
+              subPath: "{{ .Release.Name }}"
       volumes:
         - name: persistent-storage
           persistentVolumeClaim:
