@@ -62,7 +62,7 @@ output:
 	terraform output -json | jq '. | { mysql: { host: .db_host.value } }' > ../output-infrastructure/aurora.json
 	yq r ../output-infrastructure/aurora.json > ../output-infrastructure/aurora.yaml
 	rm -rf ../output-infrastructure/aurora.json
-	terraform output-infrastructure -json | jq '. | { efs : { fileSystemId: .efs_file_system_id.value } }' > ../output-infrastructure/efs.json
+	terraform output -json | jq '. | { efs : { fileSystemId: .efs_file_system_id.value } }' > ../output-infrastructure/efs.json
 	yq r ../output-infrastructure/efs.json > ../output-infrastructure/efs.yaml
 	rm -rf ../output-infrastructure/efs.json
 
