@@ -20,12 +20,15 @@ deploy-test:
 		--exclude ".idea/*" \
 		--exclude ".DS_Store" \
 		--exclude "dev-ops/*" \
-		--exclude "output/*" \
+		--exclude "output-build/*.yaml" \
+		--exclude "output-infrastructure/*.yaml" \
 		--exclude "terraform/.terraform/*" \
 		--exclude "terraform/.gitignore" \
+		--exclude "terraform/README.md" \
+		--exclude "helm/README.md" \
 		--exclude ".gitignore" \
 		--exclude "config.mk" \
-		--exclude "makefile" \
+		--exclude "Makefile" \
 		--exclude "README.md" \
 		--recursive \
     	--profile xilution-test
