@@ -12,7 +12,7 @@ make verify
 cd helm
 make clean
 make init-{test|prod}
-make wordpress-release
+make release-wordpress
 ```
 
 ## To Deprovision
