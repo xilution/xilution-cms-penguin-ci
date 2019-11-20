@@ -13,7 +13,7 @@ release-wordpress:
 		wordpress-$(XILUTION_PENGUIN_INSTANCE_ID) ./wordpress
 
 delete-wordpress:
-	helm delete wordpress
+	helm delete wordpress-$(XILUTION_PENGUIN_INSTANCE_ID)
 
 init-prod:
 	aws eks update-kubeconfig --region us-east-1 --name xilution-k8s --profile xilution-prod

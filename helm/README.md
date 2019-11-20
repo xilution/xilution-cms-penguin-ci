@@ -21,7 +21,7 @@ make release-wordpress
 
 ```
 cd helm
-make wordpress-delete
+make delete-wordpress
 ```
 
 
