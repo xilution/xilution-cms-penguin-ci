@@ -49,6 +49,9 @@ resource "aws_security_group" "mount_target_security_group" {
     cidr_blocks = [
       "0.0.0.0/0"]
   }
+  tags = {
+    xilution_organization_id = var.organization_id
+  }
 }
 
 resource "aws_efs_mount_target" "mount_target_1" {
@@ -85,6 +88,9 @@ resource "aws_security_group" "mysql_security_group" {
     protocol = "-1"
     cidr_blocks = [
       "0.0.0.0/0"]
+  }
+  tags = {
+    xilution_organization_id = var.organization_id
   }
 }
 

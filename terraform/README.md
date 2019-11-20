@@ -10,6 +10,7 @@ make verify
 
 ```
 cd terraform
+make clean
 make init
 make apply-{test|prod}
 make init-{test|prod}

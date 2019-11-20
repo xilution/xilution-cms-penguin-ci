@@ -2,6 +2,7 @@ include ../config.mk
 
 clean:
 	rm -rf .terraform
+	rm -rf ../output-infrastructure/*.yaml
 
 refresh-test:
 	terraform refresh \
@@ -58,15 +59,15 @@ init-test:
 	kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
 
 output:
-	terraform output -json | jq '. | { mysql: { host: .db_host.value } }' > ../output/aurora.json
-	yq r ../output/aurora.json > ../output/aurora.yaml
-	rm -rf ../output/aurora.json
-	terraform output -json | jq '. | { efs : { fileSystemId: .efs_file_system_id.value } }' > ../output/efs.json
-	yq r ../output/efs.json > ../output/efs.yaml
-	rm -rf ../output/efs.json
+	terraform output -json | jq '. | { mysql: { host: .db_host.value } }' > ../output-infrastructure/aurora.json
+	yq r ../output-infrastructure/aurora.json > ../output-infrastructure/aurora.yaml
+	rm -rf ../output-infrastructure/aurora.json
+	terraform output-infrastructure -json | jq '. | { efs : { fileSystemId: .efs_file_system_id.value } }' > ../output-infrastructure/efs.json
+	yq r ../output-infrastructure/efs.json > ../output-infrastructure/efs.yaml
+	rm -rf ../output-infrastructure/efs.json
 
 init:
-	terraform init -backend-config="key=path/to/state"
+	terraform init -backend-config="key=$(XILUTION_ORGANIZATION_ID)/terraform.tfstate"
 
 verify:
 	terraform validate

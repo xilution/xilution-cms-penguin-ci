@@ -1,12 +1,15 @@
 include ../config.mk
 
+clean:
+	echo "nothing to do"
+
 wordpress-release:
 	helm upgrade \
 		--install \
 		--force \
-		--values ../output/aurora.yaml \
-		--values ../output/efs.yaml \
-		--values ../output/image.yaml \
+		--values ../output-infrastructure/aurora.yaml \
+		--values ../output-infrastructure/efs.yaml \
+		--values ../output-build/image.yaml \
 		wordpress ./wordpress
 
 wordpress-delete:
