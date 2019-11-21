@@ -1,0 +1,3 @@
+TILLER_NAMESPACE := tiller
+TILLER_HOST := localhost:44134
+XILUTION_AWS_REGION := us-east-1

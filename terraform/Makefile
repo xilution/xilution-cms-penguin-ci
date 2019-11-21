@@ -1,60 +1,34 @@
 include ../config.mk
+include ./config.mk
 
 clean:
 	rm -rf .terraform
 	rm -rf ../output-infrastructure/*.yaml
 
-refresh-test:
+refresh:
 	terraform refresh \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=xilution-test"
+		-var="profile=$(XILUTION_AWS_PROFILE)"
 
-refresh-prod:
-	terraform refresh \
-		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=xilution-prod"
-
-plan-prod:
+plan:
 	terraform plan \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=xilution-prod"
+		-var="profile=$(XILUTION_AWS_PROFILE)"
 
-plan-test:
-	terraform plan \
-		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=xilution-test"
-
-apply-prod:
+apply:
 	terraform apply \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=xilution-prod" \
+		-var="profile=$(XILUTION_AWS_PROFILE)" \
 		-auto-approve
 
-apply-test:
-	terraform apply \
-		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=xilution-test" \
-		-auto-approve
-
-destroy-prod:
+destroy:
 	terraform destroy \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=xilution-prod" \
+		-var="profile=$(XILUTION_AWS_PROFILE)" \
 		-auto-approve
 
-destroy-test:
-	terraform destroy \
-		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=xilution-test" \
-		-auto-approve
-
-init-prod:
-	aws eks update-kubeconfig --region us-east-1 --name xilution-k8s --profile xilution-prod
-	kubectl apply -f config-map-aws-auth_xilution-k8s.yaml
-	kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
-
-init-test:
-	aws eks update-kubeconfig --region us-east-1 --name xilution-k8s --profile xilution-test
+configure-k8s:
+	aws eks update-kubeconfig --region $(XILUTION_AWS_REGION) --name xilution-k8s --profile $(XILUTION_AWS_PROFILE)
 	kubectl apply -f config-map-aws-auth_xilution-k8s.yaml
 	kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
 
@@ -67,7 +41,18 @@ output:
 	rm -rf ../output-infrastructure/efs.json
 
 init:
-	terraform init -backend-config="key=$(XILUTION_ORGANIZATION_ID)/terraform.tfstate"
+	terraform init \
+		-backend-config="key=$(XILUTION_ORGANIZATION_ID)/terraform.tfstate" \
+		-backend-config="bucket=xilution-cms-penguin-infrastructure-terraform-backend-$(XILUTION_ENVIRONMENT)" \
+		-backend-config="dynamodb_table=xilution-cms-penguin-infrastructure-terraform-backend-lock" \
+		-backend-config="region=$(XILUTION_AWS_REGION)" \
+		-backend-config="profile=$(XILUTION_AWS_PROFILE)"
+
+set-up:
+	@echo "nothing to do"
+
+tear-down:
+	@echo "nothing to do"
 
 verify:
 	terraform validate

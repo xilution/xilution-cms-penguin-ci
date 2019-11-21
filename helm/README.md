@@ -9,19 +9,30 @@ make verify
 ## To Provision
 
 ```
+export XILUTION_AWS_PROFILE={xilution-(test|prod)}
+export XILUTION_PENGUIN_INSTANCE_ID={xilution-penguin-instance-id}
+```
+
+```
 cd helm
-make verify
-export XILUTION_PENGUIN_INSTANCE_ID=5f3a3e4255234706a6fae7db5f3983e1
 make clean
-make init-{test|prod}
+make init
+make verify
+make set-up
 make release-wordpress
+make tear-down
 ```
 
 ## To Deprovision
 
 ```
 cd helm
+make clean
+make init
+make verify
+make set-up
 make delete-wordpress
+make tear-down
 ```
 
 

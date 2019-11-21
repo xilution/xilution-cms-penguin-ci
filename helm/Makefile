@@ -1,6 +1,10 @@
 include ../config.mk
+include ./config.mk
 
 clean:
+	@echo "nothing to do"
+
+init:
 	@echo "nothing to do"
 
 release-wordpress:
@@ -15,22 +19,18 @@ release-wordpress:
 delete-wordpress:
 	helm delete wordpress-$(XILUTION_PENGUIN_INSTANCE_ID)
 
-init-prod:
-	aws eks update-kubeconfig --region us-east-1 --name xilution-k8s --profile xilution-prod
-	helm init
-	kubectl create serviceaccount tiller -n kube-system
-	kubectl create clusterrolebinding tiller-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-	kubectl patch deploy tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' -n kube-system
+set-up:
+	aws eks update-kubeconfig --region $(XILUTION_AWS_REGION) --name xilution-k8s --profile $(XILUTION_AWS_PROFILE)
+	kubectl create namespace $(TILLER_NAMESPACE)
+	tiller -listen=$(TILLER_HOST) -storage=secret -logtostderr & ; echo $! > tiller.pid
+	sleep 5
+	helm init --client-only
 
-init-test:
-	aws eks update-kubeconfig --region us-east-1 --name xilution-k8s --profile xilution-test
-	helm init
-	kubectl create serviceaccount tiller -n kube-system
-	kubectl create clusterrolebinding tiller-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-	kubectl patch deploy tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' -n kube-system
+tear-down:
+	kill `cat tiller.pid`
 
 output:
-	kubectl get services/wordpress -o json | jq -r '.status.loadBalancer.ingress[0].hostname'
+	./scripts/register-load-balancer.sh $(XILUTION_PENGUIN_INSTANCE_ID)
 
 verify:
 	helm lint wordpress
