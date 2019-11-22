@@ -1,34 +1,43 @@
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress
+  name: "{{ .Release.Name }}"
   labels:
-    app: wordpress
+    app: "{{ .Release.Name }}"
 spec:
   selector:
     matchLabels:
-      app: wordpress
+      app: "{{ .Release.Name }}"
       tier: frontend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
+        app: "{{ .Release.Name }}"
         tier: frontend
     spec:
       containers:
         - image: "{{ .Values.wordpress.image.repository }}:{{ .Values.wordpress.image.tag }}"
-          name: wordpress
+          name: "{{ .Release.Name }}"
           env:
             - name: WORDPRESS_DB_HOST
-              value: "{{ .Values.mysql.host }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: host
             - name: WORDPRESS_DB_PORT
-              value: "{{ .Values.mysql.port }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: port
             - name: WORDPRESS_DB_NAME
               value: "{{ .Values.mysql.name }}"
             - name: WORDPRESS_DB_USER
-              value: "{{ .Values.mysql.username }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: user
             - name: WORDPRESS_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -44,4 +53,4 @@ spec:
       volumes:
         - name: persistent-storage
           persistentVolumeClaim:
-            claimName: efs-claim
+            claimName: wp-efs-claim

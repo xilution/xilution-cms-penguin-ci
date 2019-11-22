@@ -3,7 +3,6 @@ include ./config.mk
 
 clean:
 	rm -rf .terraform
-	rm -rf ../output-infrastructure/*.yaml
 
 refresh:
 	terraform refresh \
@@ -28,31 +27,32 @@ destroy:
 		-auto-approve
 
 configure-k8s:
-	aws eks update-kubeconfig --region $(XILUTION_AWS_REGION) --name xilution-k8s --profile $(XILUTION_AWS_PROFILE)
+	../scripts/update-kubeconfig.sh $(XILUTION_AWS_REGION) $(XILUTION_AWS_PROFILE)
 	kubectl apply -f config-map-aws-auth_xilution-k8s.yaml
-	kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
-
-output:
-	terraform output -json | jq '. | { mysql: { host: .db_host.value } }' > ../output-infrastructure/aurora.json
-	yq r ../output-infrastructure/aurora.json > ../output-infrastructure/aurora.yaml
-	rm -rf ../output-infrastructure/aurora.json
-	terraform output -json | jq '. | { efs : { fileSystemId: .efs_file_system_id.value } }' > ../output-infrastructure/efs.json
-	yq r ../output-infrastructure/efs.json > ../output-infrastructure/efs.yaml
-	rm -rf ../output-infrastructure/efs.json
+	rm -rf config-map-aws-auth_xilution-k8s.yaml
+	kubectl create namespace monitoring | true
+	kubectl create namespace tiller | true
+	kubectl create namespace wordpress | true
+	./scripts/install-efs-csi-driver.sh
+	./scripts/install-efs-persistent-volume.sh
+	./scripts/install-metrics-server.sh
+	./scripts/install-kubernetes-dashboard.sh
+	../scripts/start-tiller.sh
+	./scripts/install-grafana.sh
+	./scripts/install-prometheus.sh
+	../scripts/stop-tiller.sh
+	./scripts/install-db-secret.sh $(WORDPRESS_DB_PASSWORD)
+	./scripts/install-db-config-map.sh
+	./scripts/install-wp-persistent-volumn-claim.sh
 
 init:
+	chmod u+x ./scripts/*.sh
 	terraform init \
 		-backend-config="key=$(XILUTION_ORGANIZATION_ID)/terraform.tfstate" \
 		-backend-config="bucket=xilution-cms-penguin-infrastructure-terraform-backend-$(XILUTION_ENVIRONMENT)" \
 		-backend-config="dynamodb_table=xilution-cms-penguin-infrastructure-terraform-backend-lock" \
 		-backend-config="region=$(XILUTION_AWS_REGION)" \
 		-backend-config="profile=$(XILUTION_AWS_PROFILE)"
-
-set-up:
-	@echo "nothing to do"
-
-tear-down:
-	@echo "nothing to do"
 
 verify:
 	terraform validate

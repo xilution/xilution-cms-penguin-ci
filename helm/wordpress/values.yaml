@@ -1,14 +1,7 @@
 mysql:
   name: wordpress
-  username: wordpress
-  password: d29yZHByZXNz
-  host: replace-me
-  port: 3306
 
 wordpress:
   image:
     repository: wordpress
     tag: latest
-
-efs:
-  fileSystemId: replace-me

@@ -9,6 +9,9 @@ clean-prod:
 build:
 	@echo "nothing to build"
 
+init:
+	chmod u+x ./scripts/*.sh
+
 deploy-prod:
 	aws s3 cp s3://$(PRODUCT_NAME)-data-test s3://$(PRODUCT_NAME)-data-prod \
 		--recursive \
@@ -20,8 +23,7 @@ deploy-test:
 		--exclude ".idea/*" \
 		--exclude ".DS_Store" \
 		--exclude "dev-ops/*" \
-		--exclude "output-build/*.yaml" \
-		--exclude "output-infrastructure/*.yaml" \
+		--exclude "input-build/*.yaml" \
 		--exclude "terraform/.terraform/*" \
 		--exclude "terraform/.gitignore" \
 		--exclude "terraform/README.md" \

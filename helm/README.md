@@ -18,9 +18,7 @@ cd helm
 make clean
 make init
 make verify
-make set-up
 make release-wordpress
-make tear-down
 ```
 
 ## To Deprovision
@@ -30,9 +28,7 @@ cd helm
 make clean
 make init
 make verify
-make set-up
 make delete-wordpress
-make tear-down
 ```
 
 
