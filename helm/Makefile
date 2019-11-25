@@ -18,6 +18,7 @@ apply:
 		--values ../input-build/image.yaml \
 		wordpress-$(XILUTION_PENGUIN_INSTANCE_ID) ./wordpress
 	../scripts/stop-tiller.sh
+	kubectl autoscale deployment wordpress-$(XILUTION_PENGUIN_INSTANCE_ID) --cpu-percent=50 --min=1 --max=10 -n wordpress
 	./scripts/register-load-balancer.sh $(XILUTION_PENGUIN_INSTANCE_ID)
 
 destroy:
