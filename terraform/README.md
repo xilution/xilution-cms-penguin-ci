@@ -11,6 +11,8 @@ make verify
 ```
 export XILUTION_ENVIRONMENT={test|prod}
 export XILUTION_AWS_PROFILE=xilution-$XILUTION_ENVIRONMENT
+export XILUTION_AWS_REGION=us-east-1
+export K8S_CLUSTER_NAME=xilution-k8s
 export XILUTION_ORGANIZATION_ID={xilution-organization-or-sub-organization-id}
 export WORDPRESS_DB_PASSWORD=`echo -n 'wordpress' | base64`
 ```

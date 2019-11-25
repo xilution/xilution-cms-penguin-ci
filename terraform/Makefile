@@ -6,22 +6,26 @@ clean:
 
 refresh:
 	terraform refresh \
+		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="profile=$(XILUTION_AWS_PROFILE)"
 
 plan:
 	terraform plan \
+		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="profile=$(XILUTION_AWS_PROFILE)"
 
 apply:
 	terraform apply \
+		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="profile=$(XILUTION_AWS_PROFILE)" \
 		-auto-approve
 
 destroy:
 	terraform destroy \
+		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="profile=$(XILUTION_AWS_PROFILE)" \
 		-auto-approve
@@ -38,6 +42,7 @@ configure-k8s:
 	./scripts/install-metrics-server.sh
 	./scripts/install-kubernetes-dashboard.sh
 	../scripts/start-tiller.sh
+	./scripts/install-cluster-autoscaler.sh $(XILUTION_AWS_REGION) $(K8S_CLUSTER_NAME)
 	./scripts/install-grafana.sh
 	./scripts/install-prometheus.sh
 	../scripts/stop-tiller.sh

@@ -10,6 +10,12 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "k8s_cluster_name" {
+  type = string
+  description = "The Kubernetes Cluster Name"
+  default = "xilution-k8s"
+}
+
 variable "organization_id" {
   type = string
   description = "The Xilution Account Organization ID or Xilution Account Sub-Organization ID"
