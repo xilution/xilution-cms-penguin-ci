@@ -151,7 +151,7 @@ module "eks" {
     {
       instance_type = "t3.medium"
       autoscaling_enabled = true
-      protect_from_scale_in = true
+      protect_from_scale_in = false
       asg_max_size = 4
       asg_min_size = 1
       asg_desired_capacity = 2

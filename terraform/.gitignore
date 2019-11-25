@@ -1,2 +1,3 @@
 .terraform
 tiller.pid
+errored.tfstate
