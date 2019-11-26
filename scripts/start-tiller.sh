@@ -5,4 +5,3 @@ tiller -listen=localhost:44134 -storage=secret -logtostderr &
 echo $! > tiller.pid
 sleep 5
 HELM_HOST=:44134 helm init --client-only
-

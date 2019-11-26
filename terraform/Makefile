@@ -41,6 +41,7 @@ configure-k8s:
 	./scripts/install-efs-persistent-volume.sh
 	./scripts/install-metrics-server.sh
 	./scripts/install-kubernetes-dashboard.sh
+	sleep 20
 	../scripts/start-tiller.sh
 	./scripts/install-cluster-autoscaler.sh $(XILUTION_AWS_REGION) $(K8S_CLUSTER_NAME)
 	./scripts/install-grafana.sh
