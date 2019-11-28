@@ -32,5 +32,3 @@ make init
 make verify
 make destroy
 ```
-
-
