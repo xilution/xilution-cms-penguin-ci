@@ -27,7 +27,7 @@ make init
 
 ## To Verify
 
-Run `make verify`
+Run `make init && make verify`
 
 ## To Test Pipeline Deploy Step
 

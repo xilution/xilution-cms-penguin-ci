@@ -3,15 +3,15 @@ clean:
 
 infrastructure-plan:
 	terraform plan \
-		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=$(XILUTION_AWS_PROFILE)"
+		-var="master_username=$(WORDPRESS_DB_USERNAME)" \
+		-var="master_password=$(WORDPRESS_DB_PASSWORD)"
 
 infrastructure-destroy:
 	terraform destroy \
-		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="profile=$(XILUTION_AWS_PROFILE)" \
+		-var="master_username=$(WORDPRESS_DB_USERNAME)" \
+		-var="master_password=$(WORDPRESS_DB_PASSWORD)" \
 		-auto-approve
 
 uninstall-wordpress:
@@ -21,9 +21,7 @@ init:
 	terraform init \
 		-backend-config="key=$(XILUTION_ORGANIZATION_ID)/terraform.tfstate" \
 		-backend-config="bucket=xilution-cms-penguin-infrastructure-terraform-backend-$(XILUTION_ENVIRONMENT)" \
-		-backend-config="dynamodb_table=xilution-cms-penguin-infrastructure-terraform-backend-lock" \
-		-backend-config="region=$(XILUTION_AWS_REGION)" \
-		-backend-config="profile=$(XILUTION_AWS_PROFILE)"
+		-backend-config="dynamodb_table=xilution-cms-penguin-infrastructure-terraform-backend-lock"
 
 submodules:
 	git submodule add https://github.com/aws/aws-codebuild-docker-images.git aws-codebuild-docker-images
