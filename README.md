@@ -10,23 +10,41 @@
 * https://github.com/terraform-aws-modules/terraform-aws-eks
 * https://aws.amazon.com/about-aws/whats-new/2019/09/amazon-eks-announces-beta-release-of-amazon-efs-csi-driver/
 
-## To Init
+## Build the CodeBuild Image
 
 ```
+git clone https://github.com/xilution/xilution-codebuild-docker-images.git
+cd xilution-codebuild-docker-images
+make build-standard-2.0
+```
+
+## Initialize this Repo
+
+```
+make submodules
 make init
 ```
 
 ## To Verify
 
-```
-make verify
-```
+Run `make verify`
 
+## To Test Pipeline Deploy Step
 
-## Infrastructure
+Run `make test-pipeline-build`
 
-See: [Infrastructure Readme](./terraform/README.md)
+## To Test Pipeline Infrastructure Step
 
-## Deploy
+Run `make test-pipeline-infrastructure`
 
-See: [Deploy Readme](./helm/README.md)
+## To Test Pipeline Deploy Step
+
+Run `make test-pipeline-deploy`
+
+## To Uninstall Word Press from the K8s Cluster
+
+Run `make uninstall-wordpress`
+
+## To Uninstall the K8s Cluster
+
+Run `make infrastructure-destroy`

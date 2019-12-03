@@ -1,96 +1,67 @@
-include ./config.mk
+clean:
+	rm -rf .terraform properties.txt
 
-clean-test:
-	aws s3 rm s3://$(PRODUCT_NAME)-data-test --recursive --profile xilution-test
+infrastructure-plan:
+	terraform plan \
+		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
+		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
+		-var="profile=$(XILUTION_AWS_PROFILE)"
 
-clean-prod:
-	aws s3 rm s3://$(PRODUCT_NAME)-data-prod --recursive --profile xilution-prod
+infrastructure-destroy:
+	terraform destroy \
+		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
+		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
+		-var="profile=$(XILUTION_AWS_PROFILE)" \
+		-auto-approve
 
-build:
-	@echo "nothing to build"
+uninstall-wordpress:
+	helm tiller run tiller -- helm delete wordpress-$(XILUTION_PENGUIN_INSTANCE_ID)
 
 init:
-	chmod u+x ./scripts/*.sh
+	terraform init \
+		-backend-config="key=$(XILUTION_ORGANIZATION_ID)/terraform.tfstate" \
+		-backend-config="bucket=xilution-cms-penguin-infrastructure-terraform-backend-$(XILUTION_ENVIRONMENT)" \
+		-backend-config="dynamodb_table=xilution-cms-penguin-infrastructure-terraform-backend-lock" \
+		-backend-config="region=$(XILUTION_AWS_REGION)" \
+		-backend-config="profile=$(XILUTION_AWS_PROFILE)"
 
-deploy-prod:
-	aws s3 cp s3://$(PRODUCT_NAME)-data-test s3://$(PRODUCT_NAME)-data-prod \
-		--recursive \
-		--profile xilution-prod
-
-deploy-test:
-	aws s3 cp . s3://$(PRODUCT_NAME)-data-test \
-		--exclude ".git/*" \
-		--exclude ".idea/*" \
-		--exclude ".DS_Store" \
-		--exclude "dev-ops/*" \
-		--exclude "input-build/*.yaml" \
-		--exclude "terraform/.terraform/*" \
-		--exclude "terraform/.gitignore" \
-		--exclude "terraform/README.md" \
-		--exclude "helm/README.md" \
-		--exclude ".gitignore" \
-		--exclude "config.mk" \
-		--exclude "Makefile" \
-		--exclude "README.md" \
-		--recursive \
-    	--profile xilution-test
-
-deprovision-prod:
-	aws cloudformation delete-stack --stack-name $(PRODUCT_NAME)-s3 --profile xilution-prod
-	aws cloudformation delete-stack --stack-name $(PRODUCT_NAME)-terraform --profile xilution-prod
-
-deprovision-test:
-	aws cloudformation delete-stack --stack-name $(PRODUCT_NAME)-s3 --profile xilution-test
-	aws cloudformation delete-stack --stack-name $(PRODUCT_NAME)-terraform --profile xilution-test
-
-provision-prod:
-	aws cloudformation create-stack --stack-name $(PRODUCT_NAME)-s3 \
-		--template-body file://./dev-ops/aws/cloud-formation/common-s3.yaml \
-		--parameters ParameterKey=ProductName,ParameterValue=$(PRODUCT_NAME) \
-					 ParameterKey=Environment,ParameterValue=prod \
-		--profile xilution-prod
-	aws cloudformation create-stack --stack-name $(PRODUCT_NAME)-terraform \
-		--template-body file://./dev-ops/aws/cloud-formation/common-terraform.yaml \
-		--parameters ParameterKey=ProductName,ParameterValue=$(PRODUCT_NAME) \
-					 ParameterKey=Environment,ParameterValue=prod \
-		--profile xilution-prod
-
-provision-test:
-	aws cloudformation create-stack --stack-name $(PRODUCT_NAME)-s3 \
-		--template-body file://./dev-ops/aws/cloud-formation/common-s3.yaml \
-		--parameters ParameterKey=ProductName,ParameterValue=$(PRODUCT_NAME) \
-					 ParameterKey=Environment,ParameterValue=test \
-		--profile xilution-test
-	aws cloudformation create-stack --stack-name $(PRODUCT_NAME)-terraform \
-		--template-body file://./dev-ops/aws/cloud-formation/common-terraform.yaml \
-		--parameters ParameterKey=ProductName,ParameterValue=$(PRODUCT_NAME) \
-					 ParameterKey=Environment,ParameterValue=test \
-		--profile xilution-test
-
-reprovision-prod:
-	aws cloudformation update-stack --stack-name $(PRODUCT_NAME)-s3 \
-		--template-body file://./dev-ops/aws/cloud-formation/common-s3.yaml \
-		--parameters ParameterKey=ProductName,ParameterValue=$(PRODUCT_NAME) \
-					 ParameterKey=Environment,ParameterValue=prod \
-		--profile xilution-prod
-	aws cloudformation update-stack --stack-name $(PRODUCT_NAME)-terraform \
-		--template-body file://./dev-ops/aws/cloud-formation/common-terraform.yaml \
-		--parameters ParameterKey=ProductName,ParameterValue=$(PRODUCT_NAME) \
-					 ParameterKey=Environment,ParameterValue=prod \
-		--profile xilution-prod
-
-reprovision-test:
-	aws cloudformation update-stack --stack-name $(PRODUCT_NAME)-s3 \
-		--template-body file://./dev-ops/aws/cloud-formation/common-s3.yaml \
-		--parameters ParameterKey=ProductName,ParameterValue=$(PRODUCT_NAME) \
-					 ParameterKey=Environment,ParameterValue=test \
-		--profile xilution-test
-	aws cloudformation update-stack --stack-name $(PRODUCT_NAME)-terraform \
-		--template-body file://./dev-ops/aws/cloud-formation/common-terraform.yaml \
-		--parameters ParameterKey=ProductName,ParameterValue=$(PRODUCT_NAME) \
-					 ParameterKey=Environment,ParameterValue=test \
-		--profile xilution-test
+submodules:
+	git submodule add https://github.com/aws/aws-codebuild-docker-images.git aws-codebuild-docker-images
+	git submodule add git@github.com:xilution/xilution-wordpress-docker.git xilution-wordpress-docker
 
 verify:
-	aws cloudformation validate-template --template-body file://./dev-ops/aws/cloud-formation/common-s3.yaml
-	aws cloudformation validate-template --template-body file://./dev-ops/aws/cloud-formation/common-terraform.yaml
+	terraform validate
+
+test-pipeline-build:
+	/bin/bash ./scripts/build-properties.sh
+	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
+		-i xilution/codebuild/standard-2.0 \
+		-a ./output/build \
+		-b /codebuild/output/srcDownload/secSrc/build_specs/build.yaml \
+		-c \
+		-e properties.txt \
+		-s ./xilution-wordpress-docker \
+		-s build_specs:./build-specs
+
+test-pipeline-infrastructure:
+	/bin/bash ./scripts/build-properties.sh
+	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
+		-i xilution/codebuild/standard-2.0 \
+		-a ./output/infrastructure \
+		-b /codebuild/output/srcDownload/secSrc/build_specs/infrastructure.yaml \
+		-c \
+		-e properties.txt \
+		-s . \
+		-s build_specs:./build-specs
+
+test-pipeline-deploy:
+	/bin/bash ./scripts/build-properties.sh
+	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
+		-i xilution/codebuild/standard-2.0 \
+		-a ./output/deploy \
+		-b /codebuild/output/srcDownload/secSrc/build_specs/deploy.yaml \
+		-c \
+		-e properties.txt \
+		-s . \
+		-s build_specs:./build-specs \
+		-s build_output:./output/build

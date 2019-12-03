@@ -1,6 +1,7 @@
 .idea
 .terraform
+helm
 .terraform.tfstate.lock.info
-terraform.tfstate
-terraform.tfstate.backup
 config-map-aws-auth_xilution-k8s.yaml
+kubeconfig_xilution-k8s
+properties.txt

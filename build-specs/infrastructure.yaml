@@ -1,0 +1,24 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+      - git config --global url."https://$GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/"
+      - export WORDPRESS_DB_PASSWORD=`echo -n 'wordpress' | base64`
+      - |
+        terraform init \
+          -backend-config="key=$XILUTION_ORGANIZATION_ID/terraform.tfstate" \
+          -backend-config="bucket=xilution-cms-penguin-infrastructure-terraform-backend-$XILUTION_ENVIRONMENT" \
+          -backend-config="dynamodb_table=xilution-cms-penguin-infrastructure-terraform-backend-lock" \
+          -backend-config="region=$AWS_REGION" \
+          -backend-config="profile=$AWS_PROFILE"
+  build:
+    commands:
+      - |
+        terraform apply \
+          -var="k8s_cluster_name=$K8S_CLUSTER_NAME" \
+          -var="organization_id=$XILUTION_ORGANIZATION_ID" \
+          -var="profile=$AWS_PROFILE" \
+          -auto-approve
