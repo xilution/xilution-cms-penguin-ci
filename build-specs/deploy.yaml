@@ -24,3 +24,7 @@ phases:
 #      - |
 #        kubectl autoscale deployment wordpress-$XILUTION_PENGUIN_INSTANCE_ID \
 #          --cpu-percent=50 --min=1 --max=10 -n wordpress
+  post_build:
+    commands:
+      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/wordpress-$XILUTION_PENGUIN_INSTANCE_ID -n wordpress -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
+      - aws dynamodb put-item --table-name xilution-cms-penguin-reverse-proxy-load-balancer-reference --item '{"instance-id":{"S":"$XILUTION_PENGUIN_INSTANCE_ID"},"organization-id":{"S":"$XILUTION_ORGANIZATION_ID"},"load-balancer-url":{"S":"$LOAD_BALANCER_HOSTNAME"}}'
