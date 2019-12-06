@@ -29,7 +29,7 @@ make init
 
 Run `make init && make verify`
 
-## To Test Pipeline Deploy Step
+## To Test Pipeline Build Step
 
 Run `make test-pipeline-build`
 
@@ -45,7 +45,7 @@ Run `make test-pipeline-deploy`
 
 Run `make uninstall-wordpress`
 
-## To Uninstall the K8s Cluster
+## To Uninstall the infrastructure
 
 Run `make infrastructure-destroy`
 

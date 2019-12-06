@@ -1,6 +1,9 @@
 clean:
 	rm -rf .terraform properties.txt
 
+build:
+	@echo "nothing to build"
+
 infrastructure-plan:
 	terraform plan \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
@@ -42,12 +45,13 @@ test-pipeline-build:
 		-s build_specs:./build-specs
 
 test-pipeline-infrastructure:
-	/bin/bash ./scripts/build-properties.sh
+	/bin/bash ./scripts/build-test-properties.sh
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i xilution/codebuild/standard-2.0 \
 		-a ./output/infrastructure \
 		-b /codebuild/output/srcDownload/secSrc/build_specs/infrastructure.yaml \
 		-c \
+		-p xilution-beta \
 		-e properties.txt \
 		-s . \
 		-s build_specs:./build-specs
