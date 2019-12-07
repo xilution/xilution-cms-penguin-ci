@@ -5,12 +5,13 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - git config --global url."https://$GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/"
+      - git config --global url."https://$XILUTION_GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/"
       - |
         terraform init \
-          -backend-config="key=$XILUTION_ORGANIZATION_ID/terraform.tfstate" \
-          -backend-config="bucket=xilution-cms-penguin-infrastructure-terraform-backend-$XILUTION_ENVIRONMENT" \
-          -backend-config="dynamodb_table=xilution-cms-penguin-infrastructure-terraform-backend-lock"
+          -backend-config="role_arn=arn:aws:iam::$CLIENT_AWS_ACCOUNT:role/xilution-developer-role" \
+          -backend-config="key=xilution-cms-penguin/$XILUTION_PENGUIN_INSTANCE_ID/terraform.tfstate" \
+          -backend-config="bucket=xilution-terraform-backend-state-bucket-$CLIENT_AWS_ACCOUNT" \
+          -backend-config="dynamodb_table=xilution-terraform-backend-lock-table"
   build:
     commands:
       - |
