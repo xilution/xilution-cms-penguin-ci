@@ -11,9 +11,19 @@
     export CLIENT_AWS_REGION={Client AWS Region}
     export K8S_CLUSTER_NAME=xilution-k8s
     export XILUTION_PENGUIN_INSTANCE_ID=09834225195643a9852d6e39b770712c
-    export XILUTION_GITHUB_TOKEN={Xilution GitHub User Token}
     export WORDPRESS_DB_USERNAME=wordpress
     export WORDPRESS_DB_PASSWORD=$(echo -n 'wordpress' | base64)
+    ```
+
+    Check the values
+    ```
+    echo $XILUTION_ORGANIZATION_ID
+    echo $CLIENT_AWS_ACCOUNT
+    echo $CLIENT_AWS_REGION
+    echo $K8S_CLUSTER_NAME
+    echo $XILUTION_PENGUIN_INSTANCE_ID
+    echo $WORDPRESS_DB_USERNAME
+    echo $WORDPRESS_DB_PASSWORD
     ```
 
 ## Reference

@@ -6,10 +6,6 @@ phases:
   pre_build:
     commands:
       - aws eks update-kubeconfig --name $K8S_CLUSTER_NAME
-      - aws s3 cp s3://xilution-helm-data-prod/wordpress/wordpress-LATEST.tgz .
-      - mkdir -p helm
-      - tar -C helm -xzvf wordpress-LATEST.tgz
-      - unzip $CODEBUILD_SRC_DIR_build_output/artifacts.zip
   build:
     commands:
       - |

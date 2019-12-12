@@ -1,5 +1,5 @@
 clean:
-	rm -rf .terraform properties.txt
+	rm -rf .terraform
 
 build:
 	@echo "nothing to build"
@@ -39,23 +39,23 @@ test-pipeline-build:
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i xilution/codebuild/standard-2.0 \
 		-a ./output/build \
-		-b /codebuild/output/srcDownload/secSrc/build_specs/build.yaml \
+		-b /codebuild/output/srcDownload/secSrc/buildspec.yaml \
 		-c \
 		-e ./properties.txt \
 		-s ./xilution-wordpress-docker \
-		-s build_specs:./build-specs
+		-s buildspecs:./buildspecs/build
 	rm -rf ./properties.txt
 
 test-pipeline-infrastructure:
-	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)\nXILUTION_GITHUB_TOKEN=$(XILUTION_GITHUB_TOKEN)\nWORDPRESS_DB_USERNAME=$(WORDPRESS_DB_USERNAME)\nWORDPRESS_DB_PASSWORD=$(WORDPRESS_DB_PASSWORD)\nXILUTION_PENGUIN_INSTANCE_ID=$(XILUTION_PENGUIN_INSTANCE_ID)" > ./properties.txt
+	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)\n\nWORDPRESS_DB_USERNAME=$(WORDPRESS_DB_USERNAME)\nWORDPRESS_DB_PASSWORD=$(WORDPRESS_DB_PASSWORD)\nXILUTION_PENGUIN_INSTANCE_ID=$(XILUTION_PENGUIN_INSTANCE_ID)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i xilution/codebuild/standard-2.0 \
 		-a ./output/infrastructure \
-		-b /codebuild/output/srcDownload/secSrc/build_specs/infrastructure.yaml \
+		-b /codebuild/output/srcDownload/secSrc/buildspec.yaml \
 		-c \
 		-e ./properties.txt \
 		-s . \
-		-s build_specs:./build-specs
+		-s buildspecs:./buildspecs/infrastructure
 	rm -rf ./properties.txt
 
 test-pipeline-deploy:
@@ -63,10 +63,10 @@ test-pipeline-deploy:
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i xilution/codebuild/standard-2.0 \
 		-a ./output/deploy \
-		-b /codebuild/output/srcDownload/secSrc/build_specs/deploy.yaml \
+		-b /codebuild/output/srcDownload/secSrc/buildspec.yaml \
 		-c \
 		-e ./properties.txt \
 		-s . \
-		-s build_specs:./build-specs \
-		-s build_output:./output/build
+		-s buildspecs:./buildspecs \
+		-s build_output:./output/deploy
 	rm -rf ./properties.txt
