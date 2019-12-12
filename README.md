@@ -31,24 +31,17 @@
 * https://github.com/terraform-aws-modules/terraform-aws-eks
 * https://aws.amazon.com/about-aws/whats-new/2019/09/amazon-eks-announces-beta-release-of-amazon-efs-csi-driver/
 
-## Build the CodeBuild Image
-
-```
-git clone https://github.com/xilution/xilution-codebuild-docker-images.git
-cd xilution-codebuild-docker-images
-make build-standard-2.0
-```
-
 ## Initialize this Repo
 
 ```
-make submodules
+make submodules-init
+make pull-docker-image
 make init
 ```
 
 ## To Verify
 
-Run `make init && make verify`
+Run `make verify`
 
 ## To Test Pipeline Build Step
 
@@ -69,18 +62,3 @@ Run `make uninstall-wordpress`
 ## To Uninstall the infrastructure
 
 Run `make infrastructure-destroy`
-
-## Update the Kubectl Config
-
-Run `aws eks update-kubeconfig --name xilution-k8s`
-
-## Run the Kubernetes Dashboard
-
-```
-kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}')
-kubectl proxy
-```
-
-```
-open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
-```

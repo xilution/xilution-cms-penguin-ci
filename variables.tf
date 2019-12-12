@@ -24,3 +24,8 @@ variable "master_password" {
   type = string
   description = "The Database Password"
 }
+
+variable "client_aws_account" {
+  type = string
+  description = "The Xilution Client AWS Account ID"
+}
