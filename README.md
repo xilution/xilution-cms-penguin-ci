@@ -1,4 +1,4 @@
-# xilution-cms-penguin-infrastructure
+# xilution-cms-penguin-ci
 
 ## Prerequisites
 
