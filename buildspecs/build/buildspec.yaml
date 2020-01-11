@@ -10,8 +10,8 @@ phases:
       - export AWS_ACCESS_KEY_ID=`cat aws-creds.json | jq -r '.Credentials.AccessKeyId'`
       - export AWS_SECRET_ACCESS_KEY=`cat aws-creds.json | jq -r '.Credentials.SecretAccessKey'`
       - export AWS_SESSION_TOKEN=`cat aws-creds.json | jq -r '.Credentials.SessionToken'`
-      - export IMAGE_NAME=`yq r config.yaml name`
-      - export IMAGE_VERSION=`yq r config.yaml version`
+      - export IMAGE_NAME=`yq r $CODEBUILD_SRC_DIR_SourceCode/config.yaml name`
+      - export IMAGE_VERSION=`yq r $CODEBUILD_SRC_DIR_SourceCode/config.yaml version`
       - aws ecr create-repository --repository-name xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME | true
   build:
     commands:
