@@ -18,14 +18,14 @@ phases:
       - aws ecr create-repository --repository-name xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME | true
   build:
     commands:
-      - docker build -t xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME .
+      - docker build -t xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME $CODEBUILD_SRC_DIR_SourceCode
   post_build:
     commands:
       - aws ecr get-login --no-include-email | /bin/bash
       - docker tag xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME $CLIENT_AWS_ACCOUNT.dkr.ecr.$CLIENT_AWS_REGION.amazonaws.com/xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME:$IMAGE_VERSION
       - docker push $CLIENT_AWS_ACCOUNT.dkr.ecr.$CLIENT_AWS_REGION.amazonaws.com/xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME
       - |
-        cat <<EOF >./image.yaml
+        cat <<EOF >$CODEBUILD_SRC_DIR_SourceCode/image.yaml
         wordpress:
           image:
             repository: $CLIENT_AWS_ACCOUNT.dkr.ecr.$CLIENT_AWS_REGION.amazonaws.com/xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME
@@ -33,4 +33,4 @@ phases:
         EOF
 artifacts:
   files:
-    - image.yaml
+    - $CODEBUILD_SRC_DIR_SourceCode/image.yaml
