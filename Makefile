@@ -7,15 +7,11 @@ build:
 infrastructure-plan:
 	terraform plan \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="master_username=$(WORDPRESS_DB_USERNAME)" \
-		-var="master_password=$(WORDPRESS_DB_PASSWORD)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 
 infrastructure-destroy:
 	terraform destroy \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="master_username=$(WORDPRESS_DB_USERNAME)" \
-		-var="master_password=$(WORDPRESS_DB_PASSWORD)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 		-auto-approve
 
@@ -27,7 +23,7 @@ init:
 		-backend-config="role_arn=arn:aws:iam::$(CLIENT_AWS_ACCOUNT):role/xilution-developer-role" \
 		-backend-config="key=xilution-cms-penguin/$(XILUTION_PENGUIN_INSTANCE_ID)/terraform.tfstate" \
 		-backend-config="bucket=xilution-terraform-backend-state-bucket-$(CLIENT_AWS_ACCOUNT)" \
-		-backend-config="dynamodb_table=xilution-terraform-backend-lock-table"
+		-backend-config="dynamodb_table=xilution-terraform-backend-lock-table" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 
 submodules-init:
@@ -53,7 +49,7 @@ test-pipeline-build:
 	rm -rf ./properties.txt
 
 test-pipeline-infrastructure:
-	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)\n\nWORDPRESS_DB_USERNAME=$(WORDPRESS_DB_USERNAME)\nWORDPRESS_DB_PASSWORD=$(WORDPRESS_DB_PASSWORD)\nXILUTION_PENGUIN_INSTANCE_ID=$(XILUTION_PENGUIN_INSTANCE_ID)" > ./properties.txt
+	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)\nXILUTION_PENGUIN_INSTANCE_ID=$(XILUTION_PENGUIN_INSTANCE_ID)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i $(AWS_ACCOUNT).dkr.ecr.$(AWS_REGION).amazonaws.com/xilution/codebuild/standard-2.0:latest \
 		-a ./output/infrastructure \
