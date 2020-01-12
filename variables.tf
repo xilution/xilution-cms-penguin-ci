@@ -17,9 +17,11 @@ variable "k8s_cluster_name" {
 variable "master_username" {
   type = string
   description = "The Database Username"
+  default = "wordpress"
 }
 
 variable "master_password" {
   type = string
   description = "The Database Password"
+  default = "wordpress"
 }
