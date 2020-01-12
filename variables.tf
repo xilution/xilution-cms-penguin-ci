@@ -23,5 +23,5 @@ variable "master_username" {
 variable "master_password" {
   type = string
   description = "The Database Password"
-  default = "wordpress"
+  default = "d29yZHByZXNz"
 }
