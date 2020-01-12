@@ -1,18 +1,27 @@
 data "aws_vpc" "vpc" {
-  tags {
-    Name = "xilution"
+  filter {
+    name = "tag:Name"
+    values = [
+      "xilution"
+    ]
   }
 }
 
 data "aws_subnet" "public_subnet_1" {
-  tags {
-    Name = "xilution-public-subnet-1"
+  filter {
+    name = "tag:Name"
+    values = [
+      "xilution-public-subnet-1"
+    ]
   }
 }
 
 data "aws_subnet" "public_subnet_2" {
-  tags {
-    Name = "xilution-public-subnet-2"
+  filter {
+    name = "tag:Name"
+    values = [
+      "xilution-public-subnet-2"
+    ]
   }
 }
 
