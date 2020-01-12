@@ -1,18 +1,17 @@
-variable "network_stack_name" {
+variable "organization_id" {
   type = string
-  description = "Xilution Network Stack Name"
-  default = "xilution-aws-network"
+  description = "The Xilution Account Organization ID or Xilution Account Sub-Organization ID"
+}
+
+variable "client_aws_account" {
+  type = string
+  description = "The Xilution Client AWS Account ID"
 }
 
 variable "k8s_cluster_name" {
   type = string
   description = "The Kubernetes Cluster Name"
   default = "xilution-k8s"
-}
-
-variable "organization_id" {
-  type = string
-  description = "The Xilution Account Organization ID or Xilution Account Sub-Organization ID"
 }
 
 variable "master_username" {
@@ -23,9 +22,4 @@ variable "master_username" {
 variable "master_password" {
   type = string
   description = "The Database Password"
-}
-
-variable "client_aws_account" {
-  type = string
-  description = "The Xilution Client AWS Account ID"
 }
