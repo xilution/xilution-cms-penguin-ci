@@ -25,7 +25,7 @@ phases:
       - docker tag xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME $CLIENT_AWS_ACCOUNT.dkr.ecr.$CLIENT_AWS_REGION.amazonaws.com/xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME:$IMAGE_VERSION
       - docker push $CLIENT_AWS_ACCOUNT.dkr.ecr.$CLIENT_AWS_REGION.amazonaws.com/xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME
       - |
-        cat <<EOF >$CODEBUILD_SRC_DIR_SourceCode/image.yaml
+        cat <<EOF >image.yaml
         wordpress:
           image:
             repository: $CLIENT_AWS_ACCOUNT.dkr.ecr.$CLIENT_AWS_REGION.amazonaws.com/xilution/$XILUTION_ORGANIZATION_ID/$IMAGE_NAME
@@ -33,4 +33,4 @@ phases:
         EOF
 artifacts:
   files:
-    - $CODEBUILD_SRC_DIR_SourceCode/image.yaml
+    - image.yaml
