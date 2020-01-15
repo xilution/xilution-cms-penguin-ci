@@ -10,7 +10,6 @@ phases:
       - export AWS_SECRET_ACCESS_KEY=`cat aws-creds.json | jq -r '.Credentials.SecretAccessKey'`
       - export AWS_SESSION_TOKEN=`cat aws-creds.json | jq -r '.Credentials.SessionToken'`
       - aws eks update-kubeconfig --name $K8S_CLUSTER_NAME
-      - env
   build:
     commands:
       - |
@@ -19,7 +18,7 @@ phases:
           --force \
           --namespace wordpress \
           --set mysql.name=wordpress-$XILUTION_PENGUIN_INSTANCE_ID \
-          --values image.yaml \
+          --values $CODEBUILD_SRC_DIR_BuildDeployImage/image.yaml \
           wordpress-$XILUTION_PENGUIN_INSTANCE_ID ./helm/wordpress
 # Failed on n+1 execution
 #      - |
