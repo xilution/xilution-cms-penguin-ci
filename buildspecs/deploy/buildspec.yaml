@@ -27,19 +27,20 @@ phases:
   post_build:
     commands:
       - export LOAD_BALANCER_HOSTNAME=`kubectl get services/wordpress-$XILUTION_PENGUIN_INSTANCE_ID -n wordpress -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
-      - echo $LOAD_BALANCER_HOSTNAME
-#      - |
-#        cat <<EOF >./item.json
-#        {
-#          "instance-id": {
-#            "S": "$XILUTION_PENGUIN_INSTANCE_ID"
-#          },
-#          "organization-id": {
-#            "S": "$XILUTION_ORGANIZATION_ID"
-#          },
-#          "load-balancer-url": {
-#            "S": "http://$LOAD_BALANCER_HOSTNAME"
-#          }
-#        }
-#        EOF
+      - sleep 30
+      - |
+        cat <<EOF >./item.json
+        {
+          "instance-id": {
+            "S": "$XILUTION_PENGUIN_INSTANCE_ID"
+          },
+          "organization-id": {
+            "S": "$XILUTION_ORGANIZATION_ID"
+          },
+          "load-balancer-url": {
+            "S": "http://$LOAD_BALANCER_HOSTNAME"
+          }
+        }
+        EOF
+      - cat item.json
 #      - aws dynamodb put-item --table-name xilution-cms-penguin-reverse-proxy-load-balancer-reference --item file://item.json
