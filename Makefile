@@ -44,7 +44,8 @@ test-pipeline-build:
 		-b /codebuild/output/srcDownload/secSrc/buildspecs/buildspec.yaml \
 		-c \
 		-e ./properties.txt \
-		-s ./xilution-wordpress-docker \
+		-s . \
+		-s SourceCode:./xilution-wordpress-docker \
 		-s buildspecs:./buildspecs/build
 	rm -rf ./properties.txt
 

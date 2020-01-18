@@ -50,6 +50,8 @@ spec:
             - name: persistent-storage
               mountPath: /var/www/html
               subPath: "{{ .Release.Name }}"
+      imagePullSecrets:
+        - name: regcred
       volumes:
         - name: persistent-storage
           persistentVolumeClaim:
