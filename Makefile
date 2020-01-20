@@ -17,6 +17,7 @@ infrastructure-destroy:
 
 uninstall-wordpress:
 	helm tiller run tiller -- helm delete wordpress-$(XILUTION_PENGUIN_INSTANCE_ID)
+	helm tiller run tiller -- helm del --purge wordpress-$(XILUTION_PENGUIN_INSTANCE_ID)
 
 init:
 	terraform init \
