@@ -12,6 +12,7 @@
     export CLIENT_AWS_REGION={Client AWS Region}
     export K8S_CLUSTER_NAME=xilution-k8s
     export XILUTION_PENGUIN_INSTANCE_ID={Penguin Instance ID}
+    
     ```
 
     Check the values
@@ -21,6 +22,7 @@
     echo $CLIENT_AWS_REGION
     echo $K8S_CLUSTER_NAME
     echo $XILUTION_PENGUIN_INSTANCE_ID
+    
     ```
 
 ## Reference
