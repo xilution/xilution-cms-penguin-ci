@@ -57,6 +57,10 @@ Run `make init`
 
 Run `make verify`
 
+## To Test Pipeline Build Step
+
+Run `make test-pipeline-build`
+
 ## To Test Pipeline Infrastructure Step
 
 Run `make test-pipeline-infrastructure`
