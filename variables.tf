@@ -17,11 +17,19 @@ variable "k8s_cluster_name" {
 variable "master_username" {
   type = string
   description = "The Database Username"
-  default = "wordpress"
 }
 
 variable "master_password" {
   type = string
   description = "The Database Password"
-  default = "d29yZHByZXNz"
+}
+
+variable "docker_username" {
+  type = string
+  description = "The Docker Hub username"
+}
+
+variable "docker_password" {
+  type = string
+  description = "The Docker Hub password"
 }

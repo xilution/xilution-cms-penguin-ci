@@ -103,6 +103,9 @@ resource "null_resource" "k8s_configure" {
     command = "/bin/bash ${path.module}/scripts/install-namespaces.sh"
   }
   provisioner "local-exec" {
+    command = "/bin/bash ${path.module}/scripts/install-regcred-secret.sh ${var.docker_username} ${var.docker_password}"
+  }
+  provisioner "local-exec" {
     command = "/bin/bash ${path.module}/scripts/install-db-secret.sh ${var.master_password}"
   }
   provisioner "local-exec" {
