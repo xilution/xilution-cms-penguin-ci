@@ -41,12 +41,12 @@ verify:
 
 pull-docker-image:
 	aws ecr get-login --no-include-email --profile=xilution-prod | /bin/bash
-	docker pull $(XILUTION_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest
+	docker pull $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest
 
 test-pipeline-build:
 	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)\nCLIENT_AWS_REGION=$(CLIENT_AWS_REGION)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
-		-i $(XILUTION_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest \
+		-i $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest \
 		-p client-profile \
 		-a ./output/build \
 		-b /codebuild/output/srcDownload/secSrc/buildspecs/buildspec.yaml \
@@ -60,7 +60,7 @@ test-pipeline-build:
 test-pipeline-infrastructure:
 	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)\nXILUTION_PENGUIN_INSTANCE_ID=$(XILUTION_PENGUIN_INSTANCE_ID)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
-		-i $(XILUTION_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest \
+		-i $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest \
 		-p client-profile \
 		-a ./output/infrastructure \
 		-b /codebuild/output/srcDownload/secSrc/buildspecs/buildspec.yaml \
@@ -74,7 +74,7 @@ test-pipeline-infrastructure:
 test-pipeline-deploy:
 	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nK8S_CLUSTER_NAME=$(K8S_CLUSTER_NAME)\nXILUTION_PENGUIN_INSTANCE_ID=$(XILUTION_PENGUIN_INSTANCE_ID)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
-		-i $(XILUTION_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest \
+		-i $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest \
 		-p client-profile \
 		-a ./output/deploy \
 		-b /codebuild/output/srcDownload/secSrc/buildspecs/buildspec.yaml \
