@@ -128,6 +128,13 @@ resource "null_resource" "k8s_configure" {
 
 # Metrics
 
+resource "aws_lambda_permission" "allow-penguin-cloudwatch-every-ten-minute-event-rule" {
+  action = "lambda:InvokeFunction"
+  function_name = data.aws_lambda_function.metrics-reporter-lambda.function_name
+  principal = "events.amazonaws.com"
+  source_arn = aws_cloudwatch_event_rule.penguin-cloudwatch-every-ten-minute-event-rule.arn
+}
+
 resource "aws_cloudwatch_event_rule" "penguin-cloudwatch-every-ten-minute-event-rule" {
   name = "penguin-${var.pipeline_id}-cloudwatch-event-rule"
   schedule_expression = "rate(10 minutes)"
