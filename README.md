@@ -8,20 +8,20 @@
 1. The following environment variables need to be in scope.
     ```
     export XILUTION_ORGANIZATION_ID={Xilution Organization or Sub-organization ID}
+    export PIPELINE_ID={Pipeline ID}
     export CLIENT_AWS_ACCOUNT={Client AWS Account ID}
     export CLIENT_AWS_REGION={Client AWS Region}
     export K8S_CLUSTER_NAME=xilution-k8s
-    export XILUTION_PENGUIN_INSTANCE_ID={Penguin Instance ID}
     
     ```
 
     Check the values
     ```
     echo $XILUTION_ORGANIZATION_ID
+    echo $PIPELINE_ID
     echo $CLIENT_AWS_ACCOUNT
     echo $CLIENT_AWS_REGION
     echo $K8S_CLUSTER_NAME
-    echo $XILUTION_PENGUIN_INSTANCE_ID
     
     ```
 
@@ -51,6 +51,7 @@ update-xilution-mfa-profile.sh $AWS_SHARED_ACCOUNT_ID $AWS_USER_ID {mfa-code}
 assume-client-role.sh $AWS_PROD_ACCOUNT_ID $CLIENT_AWS_ACCOUNT xilution-developer-role xilution-developer-role xilution-prod client-profile
 export AWS_PROFILE=client-profile
 export AWS_REGION=$CLIENT_AWS_REGION
+
 ```
 
 ## Initialize terraform

@@ -25,6 +25,16 @@ data "aws_subnet" "public_subnet_2" {
   }
 }
 
+data "aws_iam_role" "cloudwatch-events-rule-invocation-role" {
+  name = "xilution-cloudwatch-events-rule-invocation-role"
+}
+
+data "aws_lambda_function" "metrics-reporter-lambda" {
+  function_name = "xilution-client-metrics-reporter-lambda"
+}
+
+# Database
+
 resource "aws_security_group" "mysql_security_group" {
   name = "allow-mysql-in"
   description = "Allow inbound MySQL traffic to RDS Cluster"
@@ -113,5 +123,78 @@ resource "null_resource" "k8s_configure" {
   }
   provisioner "local-exec" {
     command = "/bin/bash ${path.module}/scripts/install-wp-persistent-volumn-claim.sh"
+  }
+}
+
+# Metrics
+
+resource "aws_cloudwatch_event_rule" "penguin-cloudwatch-every-ten-minute-event-rule" {
+  name = "penguin-${var.pipeline_id}-cloudwatch-event-rule"
+  schedule_expression = "rate(10 minutes)"
+  role_arn = data.aws_iam_role.cloudwatch-events-rule-invocation-role.arn
+  tags = {
+    xilution_organization_id = var.organization_id
+    originator = "xilution.com"
+  }
+}
+
+resource "aws_cloudwatch_event_target" "penguin-cloudwatch-event-target" {
+  rule = aws_cloudwatch_event_rule.penguin-cloudwatch-every-ten-minute-event-rule
+  arn = data.aws_lambda_function.metrics-reporter-lambda.arn
+  input = <<-DOC
+  {
+    "Duration": 600000,
+    "MetricDataQueries": [
+      {
+        "Id": "${uuid()}",
+        "MetricStat": {
+          "Metric": {
+            "Namespace": "string",
+            "MetricName": "string",
+            "Dimensions": [
+              {
+                "Name": "string",
+                "Value": "string"
+              }
+            ]
+          },
+          "Period": integer,
+          "Stat": "string",
+          "Unit": "string"
+        },
+        "Expression": "string",
+        "Label": "string",
+        "ReturnData": boolean,
+        "Period": integer
+      }
+    ]
+  }
+  DOC
+}
+
+# Dashboards
+
+resource "aws_cloudwatch_dashboard" "penguin-cloudwatch-dashboard" {
+  dashboard_name = "xilution-penguin-${var.pipeline_id}-dashboard"
+
+  dashboard_body = <<-EOF
+  {
+    "widgets": [
+      {
+        "type":"metric",
+        "x":0,
+        "y":0,
+        "width":3,
+        "height":3,
+        "properties":{
+          "markdown":"Hello world"
+        }
+      }
+    ]
+  }
+  EOF
+  tags = {
+    xilution_organization_id = var.organization_id
+    originator = "xilution.com"
   }
 }
