@@ -193,8 +193,4 @@ resource "aws_cloudwatch_dashboard" "penguin-cloudwatch-dashboard" {
     ]
   }
   EOF
-  tags = {
-    xilution_organization_id = var.organization_id
-    originator = "xilution.com"
-  }
 }
