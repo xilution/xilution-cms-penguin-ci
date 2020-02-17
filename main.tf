@@ -156,23 +156,19 @@ resource "aws_cloudwatch_event_target" "penguin-cloudwatch-event-target" {
         "Id": "${uuid()}",
         "MetricStat": {
           "Metric": {
-            "Namespace": "string",
-            "MetricName": "string",
+            "Namespace": "AWS/Lambda",
+            "MetricName": "Duration",
             "Dimensions": [
               {
-                "Name": "string",
-                "Value": "string"
+                "Name": "FunctionName",
+                "Value": "xilution-client-metrics-reporter-lambda"
               }
             ]
           },
-          "Period": integer,
-          "Stat": "string",
-          "Unit": "string"
-        },
-        "Expression": "string",
-        "Label": "string",
-        "ReturnData": boolean,
-        "Period": integer
+          "Period": 60,
+          "Stat": "Average",
+          "Unit": "Milliseconds"
+        }
       }
     ]
   }
