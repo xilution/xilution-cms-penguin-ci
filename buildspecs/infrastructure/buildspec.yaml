@@ -1,13 +1,5 @@
 version: 0.2
 
-env:
-  variables:
-    MASTER_USERNAME: wordpress
-    MASTER_PASSWORD: d29yZHByZXNz
-  secrets-manager:
-    DOCKER_USERNAME: xilution-docker-hub-credentials:username
-    DOCKER_PASSWORD: xilution-docker-hub-credentials:password
-
 phases:
   install:
     runtime-versions:
@@ -33,8 +25,4 @@ phases:
           -var="organization_id=$XILUTION_ORGANIZATION_ID" \
           -var="pipeline_id=$PIPELINE_ID" \
           -var="client_aws_account=$CLIENT_AWS_ACCOUNT" \
-          -var="master_username=$MASTER_USERNAME" \
-          -var="master_password=$MASTER_PASSWORD" \
-          -var="docker_username=$DOCKER_USERNAME" \
-          -var="docker_password=$DOCKER_PASSWORD" \
           -auto-approve
