@@ -8,10 +8,14 @@
 1. The following environment variables need to be in scope.
     ```
     export XILUTION_ORGANIZATION_ID={Xilution Organization or Sub-organization ID}
-    export PIPELINE_ID={Pipeline ID}
+    export PIPELINE_ID={Penguin Pipeline ID}
+    export XILUTION_AWS_ACCOUNT=$AWS_PROD_ACCOUNT_ID
+    export XILUTION_AWS_REGION=us-east-1
+    export XILUTION_ENVIRONMENT=prod
     export CLIENT_AWS_ACCOUNT={Client AWS Account ID}
-    export CLIENT_AWS_REGION={Client AWS Region}
-    export K8S_CLUSTER_NAME={Kubernetes Cluster Name}
+    export CLIENT_AWS_REGION=us-east-1
+    export STAGE_NAME={Stage Name (lower case)}
+    export K8S_CLUSTER_NAME={Kubernetes Cluster Name. Ex: xilution-giraffe-eb78c776}
     
     ```
 
@@ -19,8 +23,12 @@
     ```
     echo $XILUTION_ORGANIZATION_ID
     echo $PIPELINE_ID
+    echo $XILUTION_AWS_ACCOUNT
+    echo $XILUTION_AWS_REGION
+    echo $XILUTION_ENVIRONMENT
     echo $CLIENT_AWS_ACCOUNT
     echo $CLIENT_AWS_REGION
+    echo $STAGE_NAME
     echo $K8S_CLUSTER_NAME
     
     ```
@@ -49,6 +57,7 @@ unset AWS_PROFILE
 unset AWS_REGION
 update-xilution-mfa-profile.sh $AWS_SHARED_ACCOUNT_ID $AWS_USER_ID {mfa-code}
 assume-client-role.sh $AWS_PROD_ACCOUNT_ID $CLIENT_AWS_ACCOUNT xilution-developer-role xilution-developer-role xilution-prod client-profile
+aws sts get-caller-identity --profile client-profile
 export AWS_PROFILE=client-profile
 export AWS_REGION=$CLIENT_AWS_REGION
 
@@ -76,9 +85,11 @@ Run `make test-pipeline-deploy`
 
 ## To access a client's k8s cluster
 
-Run `aws eks update-kubeconfig --name xilution-k8s` to update your local kubeconfig file.
+Run `aws eks update-kubeconfig --name $K8S_CLUSTER_NAME` to update your local kubeconfig file.
 
 ## To Uninstall Word Press from the K8s Cluster
+
+Update kubconfig before running the following...
 
 Run `make uninstall-wordpress`
 
