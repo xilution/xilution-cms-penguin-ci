@@ -18,8 +18,8 @@ infrastructure-destroy:
 		-auto-approve
 
 uninstall-wordpress:
-	helm tiller run tiller -- helm delete wordpress-$(PIPELINE_ID)
-	helm tiller run tiller -- helm del --purge wordpress-$(PIPELINE_ID)
+	helm tiller run tiller -- helm delete wordpress-$(PIPELINE_ID)-$(STAGE_NAME)
+	helm tiller run tiller -- helm del --purge wordpress-$(PIPELINE_ID)-$(STAGE_NAME)
 
 init:
 	terraform init \
