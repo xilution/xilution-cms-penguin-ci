@@ -7,12 +7,14 @@ build:
 infrastructure-plan:
 	terraform plan \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="pipeline_id=$(PIPELINE_ID)"
+		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 
 infrastructure-destroy:
 	terraform destroy \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)" \
 		-auto-approve
 
 uninstall-wordpress:
@@ -25,7 +27,8 @@ init:
 		-backend-config="bucket=xilution-terraform-backend-state-bucket-$(CLIENT_AWS_ACCOUNT)" \
 		-backend-config="dynamodb_table=xilution-terraform-backend-lock-table" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="pipeline_id=$(PIPELINE_ID)"
+		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 
 submodules-init:
 	git submodule update --init
@@ -41,7 +44,7 @@ pull-docker-image:
 	docker pull $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest
 
 test-pipeline-build:
-	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)" > ./properties.txt
+	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest \
 		-p client-profile \
@@ -55,7 +58,7 @@ test-pipeline-build:
 	rm -rf ./properties.txt
 
 test-pipeline-infrastructure:
-	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nPIPELINE_ID=$(PIPELINE_ID)\nPIPELINE_ID=$(PIPELINE_ID)" > ./properties.txt
+	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nPIPELINE_ID=$(PIPELINE_ID)\nPIPELINE_ID=$(PIPELINE_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/standard-2.0:latest \
 		-p client-profile \
