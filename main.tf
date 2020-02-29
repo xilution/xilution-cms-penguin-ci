@@ -6,6 +6,15 @@ data "aws_lambda_function" "metrics-reporter-lambda" {
   function_name = "xilution-client-metrics-reporter-lambda"
 }
 
+resource "null_resource" "k8s_configure" {
+  provisioner "local-exec" {
+    command = "aws eks update-kubeconfig --name ${var.k8s_cluster_name}"
+  }
+  provisioner "local-exec" {
+    command = "/bin/bash ${path.module}/scripts/install-namespaces.sh"
+  }
+}
+
 # Metrics
 
 resource "aws_lambda_permission" "allow-penguin-cloudwatch-every-ten-minute-event-rule" {

@@ -5,3 +5,5 @@ wordpress:
   image:
     repository: wordpress
     tag: latest
+
+path: /

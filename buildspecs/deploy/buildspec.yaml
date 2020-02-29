@@ -22,6 +22,7 @@ phases:
           --force \
           --namespace wordpress \
           --set mysql.name=wordpress-$PIPELINE_ID-$STAGE_NAME \
+          --set path=/wordpress/$PIPELINE_ID/$STAGE_NAME \
           --values $CODEBUILD_SRC_DIR_BuildDeployImage/image.yaml \
           wordpress-$PIPELINE_ID-$STAGE_NAME ./helm/wordpress
 # Failed on n+1 execution

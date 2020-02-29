@@ -18,3 +18,8 @@ variable "client_aws_account" {
   type = string
   description = "The Xilution Client AWS Account ID"
 }
+
+variable "k8s_cluster_name" {
+  type = string
+  description = "The Kubernetes Cluster Name"
+}

@@ -10,4 +10,4 @@ spec:
   selector:
     app: "{{ .Release.Name }}"
     tier: frontend
-  type: LoadBalancer
+  type: ClusterIP
