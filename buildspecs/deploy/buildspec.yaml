@@ -21,22 +21,25 @@ phases:
           --install \
           --force \
           --namespace wordpress \
-          --set mysql.name=wordpress-$PIPELINE_ID \
+          --set mysql.name=wordpress-$PIPELINE_ID-$STAGE_NAME \
           --values $CODEBUILD_SRC_DIR_BuildDeployImage/image.yaml \
-          wordpress-$PIPELINE_ID ./helm/wordpress
+          wordpress-$PIPELINE_ID-$STAGE_NAME ./helm/wordpress
 # Failed on n+1 execution
 #      - |
-#        kubectl autoscale deployment wordpress-$PIPELINE_ID \
+#        kubectl autoscale deployment wordpress-$PIPELINE_ID-$STAGE_NAME \
 #          --cpu-percent=50 --min=1 --max=10 -n wordpress
   post_build:
     commands:
       - sleep 30
-      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/wordpress-$PIPELINE_ID -n wordpress -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
+      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/wordpress-$PIPELINE_ID-$STAGE_NAME -n wordpress -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
       - |
         cat <<EOF >./item.json
         {
           "pipeline-id": {
             "S": "$PIPELINE_ID"
+          },
+          "stage-name": {
+            "S": "$STAGE_NAME"
           },
           "organization-id": {
             "S": "$XILUTION_ORGANIZATION_ID"
