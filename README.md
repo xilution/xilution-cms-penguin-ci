@@ -11,7 +11,7 @@
     export PIPELINE_ID={Pipeline ID}
     export CLIENT_AWS_ACCOUNT={Client AWS Account ID}
     export CLIENT_AWS_REGION={Client AWS Region}
-    export K8S_CLUSTER_NAME=xilution-k8s
+    export K8S_CLUSTER_NAME={Kubernetes Cluster Name}
     
     ```
 

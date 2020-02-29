@@ -24,5 +24,4 @@ phases:
         terraform apply \
           -var="organization_id=$XILUTION_ORGANIZATION_ID" \
           -var="pipeline_id=$PIPELINE_ID" \
-          -var="client_aws_account=$CLIENT_AWS_ACCOUNT" \
           -auto-approve
