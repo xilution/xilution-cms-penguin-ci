@@ -26,7 +26,7 @@ resource "aws_cloudwatch_event_rule" "penguin-cloudwatch-every-ten-minute-event-
 }
 
 resource "aws_cloudwatch_event_target" "penguin-cloudwatch-event-target" {
-  rule = aws_cloudwatch_event_rule.penguin-cloudwatch-every-ten-minute-event-rule
+  rule = aws_cloudwatch_event_rule.penguin-cloudwatch-every-ten-minute-event-rule.name
   arn = data.aws_lambda_function.metrics-reporter-lambda.arn
   input = <<-DOC
   {
