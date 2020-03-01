@@ -7,6 +7,9 @@ data "aws_lambda_function" "metrics-reporter-lambda" {
 }
 
 resource "null_resource" "k8s_configure" {
+  triggers = {
+    always_run = timestamp()
+  }
   provisioner "local-exec" {
     command = "aws eks update-kubeconfig --name ${var.k8s_cluster_name}"
   }
