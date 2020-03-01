@@ -29,26 +29,26 @@ phases:
 #      - |
 #        kubectl autoscale deployment wordpress-$PIPELINE_ID-$STAGE_NAME \
 #          --cpu-percent=50 --min=1 --max=10 -n wordpress
-  post_build:
-    commands:
-      - sleep 30
-      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/wordpress-$PIPELINE_ID-$STAGE_NAME -n wordpress -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
-      - |
-        cat <<EOF >./item.json
-        {
-          "pipeline-id": {
-            "S": "$PIPELINE_ID"
-          },
-          "stage-name": {
-            "S": "$STAGE_NAME"
-          },
-          "organization-id": {
-            "S": "$XILUTION_ORGANIZATION_ID"
-          },
-          "load-balancer-url": {
-            "S": "http://$LOAD_BALANCER_HOSTNAME"
-          }
-        }
-        EOF
-      - cat item.json
+#  post_build:
+#    commands:
+#      - sleep 30
+#      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/wordpress-$PIPELINE_ID-$STAGE_NAME -n wordpress -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
+#      - |
+#        cat <<EOF >./item.json
+#        {
+#          "pipeline-id": {
+#            "S": "$PIPELINE_ID"
+#          },
+#          "stage-name": {
+#            "S": "$STAGE_NAME"
+#          },
+#          "organization-id": {
+#            "S": "$XILUTION_ORGANIZATION_ID"
+#          },
+#          "load-balancer-url": {
+#            "S": "http://$LOAD_BALANCER_HOSTNAME"
+#          }
+#        }
+#        EOF
+#      - cat item.json
 #      - aws dynamodb put-item --table-name xilution-cms-penguin-reverse-proxy-load-balancer-reference --item file://item.json
