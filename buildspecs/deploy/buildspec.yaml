@@ -16,7 +16,7 @@ phases:
       - aws eks update-kubeconfig --name $K8S_CLUSTER_NAME
   build:
     commands:
-      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/ingress-nginx -n nginx-ingress -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
+      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/ingress-nginx -n ingress-nginx -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
       - echo $LOAD_BALANCER_HOSTNAME
       - |
         helm tiller run tiller -- helm upgrade \
