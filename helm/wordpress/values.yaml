@@ -6,4 +6,6 @@ wordpress:
     repository: wordpress
     tag: latest
 
+protocol: http
+host: localhost
 path: /
