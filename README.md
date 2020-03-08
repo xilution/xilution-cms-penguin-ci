@@ -91,8 +91,8 @@ Run `aws eks update-kubeconfig --name $K8S_CLUSTER_NAME` to update your local ku
 
 Update kubconfig before running the following...
 
-Run `make uninstall-wordpress`
+Run `./support/uninstall-wordpress.sh`
 
 ## To Uninstall the infrastructure
 
-Run `make infrastructure-destroy`
+Run `./support/destroy-infrastructure.sh`

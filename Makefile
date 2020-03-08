@@ -15,7 +15,7 @@ infrastructure-destroy:
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="pipeline_id=$(PIPELINE_ID)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)" \
-		-var="k8s_cluster_name=$(K8S_CLUSTER_NAME)" \
+		-var="k8s_cluster_name=nonsense" \
 		-auto-approve
 
 uninstall-wordpress:
