@@ -6,6 +6,10 @@ data "aws_lambda_function" "metrics-reporter-lambda" {
   function_name = "xilution-client-metrics-reporter-lambda"
 }
 
+data "aws_efs_file_system" "nfs" {
+  creation_token = "xilution-giraffe-${var.giraffe_pipeline_id}"
+}
+
 resource "null_resource" "k8s_configure" {
   triggers = {
     always_run = timestamp()
@@ -15,6 +19,15 @@ resource "null_resource" "k8s_configure" {
   }
   provisioner "local-exec" {
     command = "/bin/bash ${path.module}/scripts/install-namespaces.sh"
+  }
+  provisioner "local-exec" {
+    command = "/bin/bash ${path.module}/scripts/install-db-secret.sh ${var.master_password}"
+  }
+  provisioner "local-exec" {
+    command = "/bin/bash ${path.module}/scripts/install-efs-persistent-volume.sh ${data.aws_efs_file_system.nfs.id}"
+  }
+  provisioner "local-exec" {
+    command = "/bin/bash ${path.module}/scripts/install-wp-persistent-volumn-claim.sh"
   }
 }
 

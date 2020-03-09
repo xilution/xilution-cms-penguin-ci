@@ -9,6 +9,7 @@
     ```
     export XILUTION_ORGANIZATION_ID={Xilution Organization or Sub-organization ID}
     export PIPELINE_ID={Penguin Pipeline ID}
+    export GIRAFFE_PIPELINE_ID={Giraffe Pipeline ID}
     export XILUTION_AWS_ACCOUNT=$AWS_PROD_ACCOUNT_ID
     export XILUTION_AWS_REGION=us-east-1
     export XILUTION_ENVIRONMENT=prod
@@ -23,6 +24,7 @@
     ```
     echo $XILUTION_ORGANIZATION_ID
     echo $PIPELINE_ID
+    echo $GIRAFFE_PIPELINE_ID
     echo $XILUTION_AWS_ACCOUNT
     echo $XILUTION_AWS_REGION
     echo $XILUTION_ENVIRONMENT

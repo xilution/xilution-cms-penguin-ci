@@ -11,7 +11,12 @@ variable "product_id" {
 
 variable "pipeline_id" {
   type = string
-  description = "The Pipeline ID"
+  description = "The Penguin Pipeline ID"
+}
+
+variable "giraffe_pipeline_id" {
+  type = string
+  description = "The Giraffe Pipeline ID"
 }
 
 variable "client_aws_account" {
@@ -22,4 +27,14 @@ variable "client_aws_account" {
 variable "k8s_cluster_name" {
   type = string
   description = "The Kubernetes Cluster Name"
+}
+
+variable "master_username" {
+  type = string
+  description = "The Database Username"
+}
+
+variable "master_password" {
+  type = string
+  description = "The Database Password"
 }

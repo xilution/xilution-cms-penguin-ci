@@ -8,14 +8,18 @@ infrastructure-plan:
 	terraform plan \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="giraffe_pipeline_id=$(GIRAFFE_PIPELINE_ID)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 
 infrastructure-destroy:
 	terraform destroy \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="giraffe_pipeline_id=$(GIRAFFE_PIPELINE_ID)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)" \
 		-var="k8s_cluster_name=nonsense" \
+		-var="master_username=nonsense" \
+		-var="master_password=nonsense" \
 		-auto-approve
 
 uninstall-wordpress:
@@ -29,6 +33,7 @@ init:
 		-backend-config="dynamodb_table=xilution-terraform-backend-lock-table" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="giraffe_pipeline_id=$(GIRAFFE_PIPELINE_ID)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 
 submodules-init:

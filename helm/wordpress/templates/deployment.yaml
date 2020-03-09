@@ -19,25 +19,14 @@ spec:
     spec:
       containers:
         - image: "{{ .Values.wordpress.image.repository }}:{{ .Values.wordpress.image.tag }}"
-          name: "{{ .Release.Name }}"
+          name: "{{ .Release.Name }}-site"
           env:
             - name: WORDPRESS_DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: mysql-config
-                  key: host
-            - name: WORDPRESS_DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: mysql-config
-                  key: port
+              value: "{{ .Release.Name }}-db"
             - name: WORDPRESS_DB_NAME
               value: "{{ .Values.mysql.name }}"
             - name: WORDPRESS_DB_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: mysql-config
-                  key: user
+              value: wordpress
             - name: WORDPRESS_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -53,7 +42,24 @@ spec:
           volumeMounts:
             - name: persistent-storage
               mountPath: /var/www/html
-              subPath: "{{ .Release.Name }}"
+              subPath: "{{ .Release.Name }}/site"
+        - image: mysql:5.6
+          name: "{{ .Release.Name }}-db"
+          env:
+            - name: MYSQL_USER
+              value: wordpress
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: persistent-storage
+              mountPath: /var/lib/mysql
+              subPath: "{{ .Release.Name }}/db"
       imagePullSecrets:
         - name: regcred
       volumes:

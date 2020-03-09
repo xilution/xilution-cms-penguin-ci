@@ -1,5 +1,10 @@
 version: 0.2
 
+env:
+  variables:
+    MASTER_USERNAME: wordpress
+    MASTER_PASSWORD: d29yZHByZXNz
+
 phases:
   pre_build:
     commands:
@@ -21,6 +26,9 @@ phases:
         terraform apply \
           -var="organization_id=$XILUTION_ORGANIZATION_ID" \
           -var="pipeline_id=$PIPELINE_ID" \
+          -var="giraffe_pipeline_id=$GIRAFFE_PIPELINE_ID" \
           -var="client_aws_account=$CLIENT_AWS_ACCOUNT" \
           -var="k8s_cluster_name=$K8S_CLUSTER_NAME" \
+          -var="master_username=$MASTER_USERNAME" \
+          -var="master_password=$MASTER_PASSWORD" \
           -auto-approve
