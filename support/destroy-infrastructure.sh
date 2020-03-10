@@ -29,7 +29,7 @@ export AWS_PROFILE=client-profile
 export AWS_REGION=$client_aws_region
 
 export XILUTION_ORGANIZATION_ID=${client_xilution_organization_id}
-export PIPELINE_ID=${penguin_pipeline_id}
+export PENGUIN_PIPELINE_ID=${penguin_pipeline_id}
 export GIRAFFE_PIPELINE_ID=${giraffe_pipeline_id}
 export XILUTION_AWS_ACCOUNT=$AWS_PROD_ACCOUNT_ID
 export XILUTION_AWS_REGION=us-east-1

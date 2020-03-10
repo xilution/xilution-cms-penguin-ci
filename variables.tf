@@ -9,7 +9,7 @@ variable "product_id" {
   default = "12ea46e5dbb44f87b18b20f801678aa4"
 }
 
-variable "pipeline_id" {
+variable "penguin_pipeline_id" {
   type = string
   description = "The Penguin Pipeline ID"
 }

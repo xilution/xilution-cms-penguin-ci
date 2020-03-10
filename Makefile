@@ -7,14 +7,14 @@ build:
 infrastructure-plan:
 	terraform plan \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="penguin_pipeline_id=$(PENGUIN_PIPELINE_ID)" \
 		-var="giraffe_pipeline_id=$(GIRAFFE_PIPELINE_ID)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 
 infrastructure-destroy:
 	terraform destroy \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="penguin_pipeline_id=$(PENGUIN_PIPELINE_ID)" \
 		-var="giraffe_pipeline_id=$(GIRAFFE_PIPELINE_ID)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)" \
 		-var="k8s_cluster_name=nonsense" \
@@ -23,16 +23,16 @@ infrastructure-destroy:
 		-auto-approve
 
 uninstall-wordpress:
-	helm tiller run tiller -- helm delete wordpress-$(PIPELINE_ID)-$(STAGE_NAME)
-	helm tiller run tiller -- helm del --purge wordpress-$(PIPELINE_ID)-$(STAGE_NAME)
+	helm tiller run tiller -- helm delete wordpress-$(PENGUIN_PIPELINE_ID)-$(STAGE_NAME)
+	helm tiller run tiller -- helm del --purge wordpress-$(PENGUIN_PIPELINE_ID)-$(STAGE_NAME)
 
 init:
 	terraform init \
-		-backend-config="key=xilution-cms-penguin/$(PIPELINE_ID)/terraform.tfstate" \
+		-backend-config="key=xilution-cms-penguin/$(PENGUIN_PIPELINE_ID)/terraform.tfstate" \
 		-backend-config="bucket=xilution-terraform-backend-state-bucket-$(CLIENT_AWS_ACCOUNT)" \
 		-backend-config="dynamodb_table=xilution-terraform-backend-lock-table" \
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
-		-var="pipeline_id=$(PIPELINE_ID)" \
+		-var="penguin_pipeline_id=$(PENGUIN_PIPELINE_ID)" \
 		-var="giraffe_pipeline_id=$(GIRAFFE_PIPELINE_ID)" \
 		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
 
@@ -64,7 +64,7 @@ test-pipeline-build:
 	rm -rf ./properties.txt
 
 test-pipeline-infrastructure:
-	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nPIPELINE_ID=$(PIPELINE_ID)\nPIPELINE_ID=$(PIPELINE_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)" > ./properties.txt
+	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nPENGUIN_PIPELINE_ID=$(PENGUIN_PIPELINE_ID)\nGIRAFFE_PIPELINE_ID=$(GIRAFFE_PIPELINE_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/docker-19:latest \
 		-p client-profile \
@@ -78,7 +78,7 @@ test-pipeline-infrastructure:
 	rm -rf ./properties.txt
 
 test-pipeline-deploy:
-	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nK8S_CLUSTER_NAME=$(K8S_CLUSTER_NAME)\nPIPELINE_ID=$(PIPELINE_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)" > ./properties.txt
+	echo "XILUTION_ORGANIZATION_ID=$(XILUTION_ORGANIZATION_ID)\nK8S_CLUSTER_NAME=$(K8S_CLUSTER_NAME)\nPENGUIN_PIPELINE_ID=$(PENGUIN_PIPELINE_ID)\nCLIENT_AWS_ACCOUNT=$(CLIENT_AWS_ACCOUNT)" > ./properties.txt
 	/bin/bash ./aws-codebuild-docker-images/local_builds/codebuild_build.sh \
 		-i $(AWS_PROD_ACCOUNT_ID).dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/docker-19:latest \
 		-p client-profile \
