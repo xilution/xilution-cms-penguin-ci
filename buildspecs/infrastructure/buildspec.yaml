@@ -4,6 +4,9 @@ env:
   variables:
     MASTER_USERNAME: wordpress
     MASTER_PASSWORD: d29yZHByZXNz
+  secrets-manager:
+    DOCKER_USERNAME: xilution-docker-hub-credentials:username
+    DOCKER_PASSWORD: xilution-docker-hub-credentials:password
 
 phases:
   pre_build:
@@ -31,4 +34,6 @@ phases:
           -var="k8s_cluster_name=$K8S_CLUSTER_NAME" \
           -var="master_username=$MASTER_USERNAME" \
           -var="master_password=$MASTER_PASSWORD" \
+          -var="docker_username=$DOCKER_USERNAME" \
+          -var="docker_password=$DOCKER_PASSWORD" \
           -auto-approve

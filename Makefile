@@ -20,6 +20,8 @@ infrastructure-destroy:
 		-var="k8s_cluster_name=nonsense" \
 		-var="master_username=nonsense" \
 		-var="master_password=nonsense" \
+		-var="docker_username=nonsense" \
+		-var="docker_password=nonsense" \
 		-auto-approve
 
 uninstall-wordpress:

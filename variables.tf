@@ -38,3 +38,13 @@ variable "master_password" {
   type = string
   description = "The Database Password"
 }
+
+variable "docker_username" {
+  type = string
+  description = "The Docker Hub username"
+}
+
+variable "docker_password" {
+  type = string
+  description = "The Docker Hub password"
+}

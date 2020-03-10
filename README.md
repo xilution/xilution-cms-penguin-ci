@@ -89,6 +89,15 @@ Run `make test-pipeline-deploy`
 
 Run `aws eks update-kubeconfig --name $K8S_CLUSTER_NAME` to update your local kubeconfig file.
 
+## To connect to a client's Kubernetes Dashboard
+
+Reference: https://docs.aws.amazon.com/eks/latest/userguide/dashboard-tutorial.html
+
+* Run `kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}')` to retrieve the authentication token.
+* Run `kubectl proxy` to start a kubectl proxy.
+    * Type `ctrl-c` to stop the kubectl proxy.
+* To access the dashboard endpoint, open the following link with a web browser: `http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login`.
+
 ## To Uninstall Word Press from the K8s Cluster
 
 Update kubconfig before running the following...
