@@ -12,18 +12,3 @@ spec:
               serviceName: "{{ .Release.Name }}-site"
               servicePort: 80
             path: "{{ .Values.path }}"
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: "{{ .Release.Name }}-rewrite"
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-spec:
-  rules:
-    - http:
-        paths:
-          - backend:
-              serviceName: "{{ .Release.Name }}-site"
-              servicePort: 80
-            path: "{{ .Values.path }}(/|$)(.*)"
