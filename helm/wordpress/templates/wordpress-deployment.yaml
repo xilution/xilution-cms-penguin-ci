@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Release.Name }}"
+  name: "{{ .Release.Name }}-site"
   labels:
     app: "{{ .Release.Name }}"
 spec:
@@ -38,33 +38,11 @@ spec:
                 define( 'WP_HOME', '{{ .Values.protocol }}://{{ .Values.host }}{{ .Values.path }}' );
           ports:
             - containerPort: 80
-              name: wordpress
+              name: "{{ .Release.Name }}-site"
           volumeMounts:
             - name: persistent-storage
               mountPath: /var/www/html
               subPath: "{{ .Release.Name }}/site"
-        - image: mysql:5.6
-          name: "{{ .Release.Name }}-db"
-          env:
-            - name: MYSQL_USER
-              value: wordpress
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-pass
-                  key: password
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-pass
-                  key: password
-          ports:
-            - containerPort: 3306
-              name: mysql
-          volumeMounts:
-            - name: persistent-storage
-              mountPath: /var/lib/mysql
-              subPath: "{{ .Release.Name }}/db"
       imagePullSecrets:
         - name: regcred
       volumes:
