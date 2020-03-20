@@ -33,7 +33,7 @@ spec:
             - name: WORDPRESS_CONFIG_EXTRA
               value: |
                 define( 'WP_SITEURL', '{{ .Values.protocol }}://{{ .Values.host }}{{ .Values.path }}' );
-                define( 'WP_HOME', '{{ .Values.protocol }}://{{ .Values.host }}' );
+                define( 'WP_HOME', '{{ .Values.protocol }}://{{ .Values.host }}{{ .Values.path }}' );
           ports:
             - containerPort: 80
               name: site
