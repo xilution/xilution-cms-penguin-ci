@@ -22,7 +22,7 @@ spec:
           name: "{{ .Release.Name }}-site"
           env:
             - name: WORDPRESS_DB_HOST
-              value: "{{ .Release.Name }}-db"
+              value: "{{ .Release.Name }}-db.wordpress"
             - name: WORDPRESS_DB_NAME
               value: "{{ .Values.mysql.name }}"
             - name: WORDPRESS_DB_USER
