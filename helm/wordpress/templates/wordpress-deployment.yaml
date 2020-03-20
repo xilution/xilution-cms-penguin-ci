@@ -38,7 +38,7 @@ spec:
                 define( 'WP_HOME', '{{ .Values.protocol }}://{{ .Values.host }}{{ .Values.path }}' );
           ports:
             - containerPort: 80
-              name: "{{ .Release.Name }}-site"
+              name: site
           volumeMounts:
             - name: persistent-storage
               mountPath: /var/www/html

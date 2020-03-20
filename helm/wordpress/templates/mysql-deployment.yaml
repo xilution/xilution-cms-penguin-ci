@@ -35,7 +35,7 @@ spec:
                   key: password
           ports:
             - containerPort: 3306
-              name: "{{ .Release.Name }}-db"
+              name: mysql
           volumeMounts:
             - name: persistent-storage
               mountPath: /var/lib/mysql
