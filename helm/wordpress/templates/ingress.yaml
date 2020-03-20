@@ -24,6 +24,6 @@ spec:
     - http:
         paths:
           - backend:
-              serviceName: "{{ .Release.Name }}"
+              serviceName: "{{ .Release.Name }}-site"
               servicePort: 80
             path: "{{ .Values.path }}(/|$)(.*)"
