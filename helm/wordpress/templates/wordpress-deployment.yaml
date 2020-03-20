@@ -34,6 +34,7 @@ spec:
               value: |
                 define( 'WP_SITEURL', '{{ .Values.protocol }}://{{ .Values.host }}{{ .Values.path }}' );
                 define( 'WP_HOME', '{{ .Values.protocol }}://{{ .Values.host }}{{ .Values.path }}' );
+                define( 'WP_ALLOW_MULTISITE', true );
           ports:
             - containerPort: 80
               name: site
