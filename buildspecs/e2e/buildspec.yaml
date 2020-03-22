@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - |
+        aws sts assume-role \
+          --role-arn arn:aws:iam::$CLIENT_AWS_ACCOUNT:role/xilution-developer-role \
+          --role-session-name xilution-client-session > aws-creds.json
+      - export AWS_ACCESS_KEY_ID=`cat aws-creds.json | jq -r '.Credentials.AccessKeyId'`
+      - export AWS_SECRET_ACCESS_KEY=`cat aws-creds.json | jq -r '.Credentials.SecretAccessKey'`
+      - export AWS_SESSION_TOKEN=`cat aws-creds.json | jq -r '.Credentials.SessionToken'`
+      - aws eks update-kubeconfig --name $K8S_CLUSTER_NAME
+      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/ingress-nginx -n ingress-nginx -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
+      - export WORDPRESS_SITE_BASE_URL=http://$LOAD_BALANCER_HOSTNAME/wordpress/$PENGUIN_PIPELINE_ID/$STAGE_NAME
+      - while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' $WORDPRESS_SITE_BASE_URL)" != "200" ]]; do sleep 5; done
+  build:
+    commands:
+      - export COMMANDS=$(yq read xilution.yaml -j | jq -r '.tests.e2e.commands[] | @base64')
+      - export NOT_FOUND_MESSAGE='No end to end test commands found.'
+      - if [[ $(echo $COMMANDS | awk '{print NF}') > 0 ]]; then for COMMAND in $COMMANDS; do echo $COMMAND | base64 --decode | bash; done; else echo $NOT_FOUND_MESSAGE; fi
+
+artifacts:
+  files:
+    - output/e2e/**/*
