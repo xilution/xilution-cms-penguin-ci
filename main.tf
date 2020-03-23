@@ -38,7 +38,7 @@ resource "aws_lambda_permission" "allow-penguin-cloudwatch-every-ten-minute-even
 }
 
 resource "aws_cloudwatch_event_rule" "penguin-cloudwatch-every-ten-minute-event-rule" {
-  name = "penguin-${var.penguin_pipeline_id}-cloudwatch-event-rule"
+  name = "xilution-penguin-${substr(var.pipeline_id, 0, 8)}-cloudwatch-event-rule"
   schedule_expression = "rate(10 minutes)"
   role_arn = data.aws_iam_role.cloudwatch-events-rule-invocation-role.arn
   tags = {
@@ -89,7 +89,7 @@ resource "aws_cloudwatch_event_target" "penguin-cloudwatch-event-target" {
 # Dashboards
 
 resource "aws_cloudwatch_dashboard" "penguin-cloudwatch-dashboard" {
-  dashboard_name = "xilution-penguin-${var.penguin_pipeline_id}-dashboard"
+  dashboard_name = "xilution-penguin-${substr(var.pipeline_id, 0, 8)}-dashboard"
 
   dashboard_body = <<-EOF
   {
