@@ -9,14 +9,14 @@ variable "product_id" {
   default = "12ea46e5dbb44f87b18b20f801678aa4"
 }
 
-variable "penguin_pipeline_id" {
-  type = string
-  description = "The Penguin Pipeline ID"
-}
-
 variable "giraffe_pipeline_id" {
   type = string
   description = "The Giraffe Pipeline ID"
+}
+
+variable "penguin_pipeline_id" {
+  type = string
+  description = "The Penguin Pipeline ID"
 }
 
 variable "client_aws_account" {
