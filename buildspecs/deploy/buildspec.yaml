@@ -22,7 +22,7 @@ phases:
           --set mysql.name=wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME \
           --set host=$LOAD_BALANCER_HOSTNAME \
           --set path=/wordpress/$PENGUIN_PIPELINE_ID/$STAGE_NAME \
-          --values $CODEBUILD_SRC_DIR/image.yaml \
+          --values $CODEBUILD_SRC_DIR_BuildDeployImage/image.yaml \
           wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME $CODEBUILD_SRC_DIR/helm/wordpress
 # Failed on n+1 execution
 #      - |
