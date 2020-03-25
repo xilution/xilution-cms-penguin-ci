@@ -23,7 +23,7 @@ phases:
           -backend-config="key=xilution-cms-penguin/$PENGUIN_PIPELINE_ID/terraform.tfstate" \
           -backend-config="bucket=xilution-terraform-backend-state-bucket-$CLIENT_AWS_ACCOUNT" \
           -backend-config="dynamodb_table=xilution-terraform-backend-lock-table" \
-          $CODEBUILD_SRC_DIR_ImageDeploySourceCode
+          $CODEBUILD_SRC_DIR
   build:
     commands:
       - |
@@ -38,4 +38,4 @@ phases:
           -var="docker_username=$DOCKER_USERNAME" \
           -var="docker_password=$DOCKER_PASSWORD" \
           -auto-approve \
-          $CODEBUILD_SRC_DIR_ImageDeploySourceCode
+          $CODEBUILD_SRC_DIR
