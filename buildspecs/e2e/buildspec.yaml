@@ -16,6 +16,7 @@ phases:
       - while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' $WORDPRESS_SITE_BASE_URL)" != "200" ]]; do sleep 5; done
   build:
     commands:
+      - cat xilution.yaml
       - export COMMANDS=$(yq read xilution.yaml -j | jq -r '.tests.e2e.commands[] | @base64')
       - export NOT_FOUND_MESSAGE='No end to end test commands found.'
       - if [[ $(echo $COMMANDS | awk '{print NF}') > 0 ]]; then for COMMAND in $COMMANDS; do echo $COMMAND | base64 --decode | bash; done; else echo $NOT_FOUND_MESSAGE; fi
