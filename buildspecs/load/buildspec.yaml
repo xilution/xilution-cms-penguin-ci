@@ -25,7 +25,7 @@ phases:
 
 reports:
   LoadTestReports:
-  files:
-      - '**/*'
+    files:
+        - '**/*'
     base-directory: $CODEBUILD_SRC_DIR_SourceCode/output/load
 
