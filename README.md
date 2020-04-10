@@ -48,7 +48,7 @@ Run `make pull-docker-image`
 
 Run `make submodules-init`
 
-## To updated the submodules
+## To update the submodules
 
 Run `make submodules-update`
 
