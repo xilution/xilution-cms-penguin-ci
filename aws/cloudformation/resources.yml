@@ -1,0 +1,24 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  XilutionSharedAccountId:
+    Type: String
+
+Resources:
+  BuildAndDeployProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      EncryptionKey: !Sub arn:aws:kms:us-east-1:${XilutionSharedAccountId}:alias/xilution-build-artifact-key
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/xilution/codebuild/docker-19:latest
+        PrivilegedMode: true
+        Type: LINUX_CONTAINER
+      Name: penguin-build-and-deploy
+      ServiceRole: !Sub arn:aws:iam::${AWS::AccountId}:role/Deployer
+      Source:
+        BuildSpec: buildspecs/build/buildspec.yml
+        Type: CODEPIPELINE
