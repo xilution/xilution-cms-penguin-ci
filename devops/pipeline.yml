@@ -1,0 +1,68 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  Repository:
+    Type: String
+
+Resources:
+  PipelineWebhook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: '{{resolve:secretsmanager:GithubCodePipelineToken:SecretString:GithubCodePipelineToken}}'
+      Filters:
+        - JsonPath: $.ref
+          MatchEquals: "refs/heads/{Branch}"
+      TargetPipeline: !Ref Pipeline
+      TargetAction: Source
+      TargetPipelineVersion: !GetAtt Pipeline.Version
+      RegisterWithThirdParty: true
+
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: !Ref AWS::StackName
+      ArtifactStore:
+        Type: S3
+        Location: xilution-build-artifacts
+        EncryptionKey:
+          Id: !Sub arn:aws:kms:us-east-1:${AWS::AccountId}:alias/xilution-build-artifact-key
+          Type: KMS
+      RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/Pipeline
+      RestartExecutionOnUpdate: true
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Provider: GitHub
+                Owner: ThirdParty
+                Version: 1
+              OutputArtifacts:
+                - Name: SourceCode
+              Configuration:
+                Owner: xilution
+                Repo: !Ref Repository
+                Branch: add-generic-build-project
+                OAuthToken: '{{resolve:secretsmanager:GithubCodePipelineToken:SecretString:GithubCodePipelineToken}}'
+                PollForSourceChanges: false
+        - Name: Deploy_Prod_Resources
+          Actions:
+            - Name: Deploy_Prod_Resources
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              InputArtifacts:
+                - Name: SourceCode
+              Configuration:
+                StackName: !Sub ${Repository}-resources
+                ActionMode: CREATE_UPDATE
+                TemplatePath: SourceCode::aws/cloudformation/resources.yml
+                RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/Deployer
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
+              RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/Deployer
