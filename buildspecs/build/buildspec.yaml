@@ -8,6 +8,11 @@ env:
 phases:
   install:
     commands:
+      - if [ -z $XILUTION_ORGANIZATION_ID ]; then echo [ERROR] XILUTION_ORGANIZATION_ID variable not set; exit 1; fi
+      - if [ -z $PENGUIN_PIPELINE_ID ]; then echo [ERROR] PENGUIN_PIPELINE_ID variable not set; exit 1; fi
+      - if [ -z $XILUTION_AWS_ACCOUNT ]; then echo [ERROR] XILUTION_AWS_ACCOUNT variable not set; exit 1; fi
+      - if [ -z $XILUTION_AWS_REGION ]; then echo [ERROR] XILUTION_AWS_REGION variable not set; exit 1; fi
+      - if [ -z $XILUTION_ENVIRONMENT ]; then echo [ERROR] XILUTION_ENVIRONMENT variable not set; exit 1; fi
       - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   pre_build:
