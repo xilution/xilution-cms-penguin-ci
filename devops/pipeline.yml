@@ -50,7 +50,7 @@ Resources:
               Configuration:
                 Owner: xilution
                 Repo: !Ref Repository
-                Branch: add-generic-build-project
+                Branch: master
                 OAuthToken: '{{resolve:secretsmanager:GithubCodePipelineToken:SecretString:GithubCodePipelineToken}}'
                 PollForSourceChanges: false
         - Name: Deploy_Prod_Resources
