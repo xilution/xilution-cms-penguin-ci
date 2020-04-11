@@ -17,13 +17,13 @@ phases:
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   pre_build:
     commands:
-      - cat $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml
-      - export DOCKER_HUB_ACCOUNT_NAME=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml dockerHub.account`
-      - export DOCKER_HUB_REPOSITORY_NAME=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml dockerHub.repository`
-      - export IMAGE_VERSION=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml version`
+      - cat $CODEBUILD_SRC_DIR_SourceFromGitlabZip/xilution.yaml
+      - export DOCKER_HUB_ACCOUNT_NAME=`yq r $CODEBUILD_SRC_DIR_SourceFromGitlabZip/xilution.yaml dockerHub.account`
+      - export DOCKER_HUB_REPOSITORY_NAME=`yq r $CODEBUILD_SRC_DIR_SourceFromGitlabZip/xilution.yaml dockerHub.repository`
+      - export IMAGE_VERSION=`yq r $CODEBUILD_SRC_DIR_SourceFromGitlabZip/xilution.yaml version`
   build:
     commands:
-      - docker build -t xilution/$DOCKER_HUB_REPOSITORY_NAME $CODEBUILD_SRC_DIR_SourceCode
+      - docker build -t xilution/$DOCKER_HUB_REPOSITORY_NAME $CODEBUILD_SRC_DIR_SourceFromGitlabZip
   post_build:
     commands:
       - docker tag $DOCKER_HUB_ACCOUNT_NAME/$DOCKER_HUB_REPOSITORY_NAME $DOCKER_HUB_ACCOUNT_NAME/$DOCKER_HUB_REPOSITORY_NAME:$IMAGE_VERSION
