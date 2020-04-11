@@ -21,5 +21,6 @@ echo "Deploying pipeline stack $stackName"
 aws cloudformation deploy --stack-name "$stackName" \
   --template-file devops/pipeline.yml \
   --parameter-overrides Repository="$currentDirectory" \
+    XilutionSharedAccountId="$AWS_SHARED_ACCOUNT_ID" \
   --profile xilution-shared \
   --no-fail-on-empty-changeset

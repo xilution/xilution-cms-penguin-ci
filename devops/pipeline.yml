@@ -4,6 +4,8 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   Repository:
     Type: String
+  XilutionSharedAccountId:
+    Type: String
 
 Resources:
   PipelineWebhook:
@@ -63,6 +65,7 @@ Resources:
                 StackName: !Sub ${Repository}-resources
                 ActionMode: CREATE_UPDATE
                 TemplatePath: SourceCode::aws/cloudformation/resources.yml
+                ParameterOverrides: !Sub '{"XilutionSharedAccountId": ${XilutionSharedAccountId}}'
                 RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/Deployer
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
               RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/Deployer
