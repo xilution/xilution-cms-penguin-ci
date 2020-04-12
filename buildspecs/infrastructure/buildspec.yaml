@@ -9,6 +9,18 @@ env:
     DOCKER_PASSWORD: xilution-docker-hub-credentials:password
 
 phases:
+  install:
+    commands:
+      - if [ -z $XILUTION_ORGANIZATION_ID ]; then echo [ERROR] XILUTION_ORGANIZATION_ID variable not set; exit 1; fi
+      - if [ -z $GIRAFFE_PIPELINE_ID ]; then echo [ERROR] GIRAFFE_PIPELINE_ID variable not set; exit 1; fi
+      - if [ -z $PENGUIN_PIPELINE_ID ]; then echo [ERROR] PENGUIN_PIPELINE_ID variable not set; exit 1; fi
+      - if [ -z $XILUTION_AWS_ACCOUNT ]; then echo [ERROR] XILUTION_AWS_ACCOUNT variable not set; exit 1; fi
+      - if [ -z $XILUTION_AWS_REGION ]; then echo [ERROR] XILUTION_AWS_REGION variable not set; exit 1; fi
+      - if [ -z $XILUTION_ENVIRONMENT ]; then echo [ERROR] XILUTION_ENVIRONMENT variable not set; exit 1; fi
+      - if [ -z $CLIENT_AWS_ACCOUNT ]; then echo [ERROR] CLIENT_AWS_ACCOUNT variable not set; exit 1; fi
+      - if [ -z $CLIENT_AWS_REGION ]; then echo [ERROR] CLIENT_AWS_REGION variable not set; exit 1; fi
+      - if [ -z $K8S_CLUSTER_NAME ]; then echo [ERROR] K8S_CLUSTER_NAME variable not set; exit 1; fi
+      - if [ -z $STAGE_NAME ]; then echo [ERROR] STAGE_NAME variable not set; exit 1; fi
   pre_build:
     commands:
       - |
