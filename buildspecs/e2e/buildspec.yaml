@@ -14,7 +14,7 @@ phases:
       - export LOAD_BALANCER_HOSTNAME=`kubectl get services/ingress-nginx -n ingress-nginx -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
       - export WORDPRESS_SITE_BASE_URL=http://$LOAD_BALANCER_HOSTNAME/wordpress/$PENGUIN_PIPELINE_ID/$STAGE_NAME
       - echo $WORDPRESS_SITE_BASE_URL
-      - while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' $WORDPRESS_SITE_BASE_URL)" != "200" ]]; do sleep 5; done
+      - timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' $WORDPRESS_SITE_BASE_URL)" != "200" ]]; do sleep 5; done' || false
   build:
     commands:
       - cd $CODEBUILD_SRC_DIR_SourceCode
