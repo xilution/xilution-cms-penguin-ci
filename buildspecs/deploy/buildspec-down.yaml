@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - |
+        aws sts assume-role \
+          --role-arn arn:aws:iam::$CLIENT_AWS_ACCOUNT:role/xilution-developer-role \
+          --role-session-name xilution-client-session > aws-creds.json
+      - export AWS_ACCESS_KEY_ID=`cat aws-creds.json | jq -r '.Credentials.AccessKeyId'`
+      - export AWS_SECRET_ACCESS_KEY=`cat aws-creds.json | jq -r '.Credentials.SecretAccessKey'`
+      - export AWS_SESSION_TOKEN=`cat aws-creds.json | jq -r '.Credentials.SessionToken'`
+  build:
+    commands:
+      - helm tiller run tiller -- helm delete wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME
+      - helm tiller run tiller -- helm del --purge wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME
