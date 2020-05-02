@@ -28,6 +28,16 @@ resource "null_resource" "k8s_configure" {
   }
 }
 
+# Data Transfer
+
+locals {
+  k8s_data_transfer_bucket_name = "xilution-penguin-${substr(var.penguin_pipeline_id, 0, 8)}-data-transfer"
+}
+
+resource "aws_s3_bucket" "k8s_data_transfer_bucket" {
+  bucket = local.k8s_data_transfer_bucket_name
+}
+
 # Metrics
 
 resource "aws_lambda_permission" "allow-penguin-cloudwatch-every-ten-minute-event-rule" {
