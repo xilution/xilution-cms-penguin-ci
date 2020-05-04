@@ -7,7 +7,7 @@ phases:
       - cat ./xilution.yaml
       - echo $STAGE_NAME
       - export EXCLUDE=$(yq read ./xilution.yaml -j | jq -r '.tests.e2e.excludeStages[]? | @base64')
-      - if [[ $(echo EXCLUDE | awk '{print NF}') > 0 ]]; then for STAGE in $EXCLUDE; do if [[ $(echo $STAGE | base64 --decode | awk '{print tolower($0)}') == $STAGE_NAME ]]; then echo Skipping Stage && exit 0; fi; done; fi
+      - if [[ $(echo EXCLUDE | awk '{print NF}') > 0 ]]; then for STAGE in $EXCLUDE; do if [[ $(echo $STAGE | base64 --decode | awk '{print tolower($0)}') == $STAGE_NAME ]]; then echo Stopping Build && aws codebuild stop-build --id ${CODEBUILD_BUILD_ID}; fi; done; fi
       - |
         aws sts assume-role \
           --role-arn arn:aws:iam::$CLIENT_AWS_ACCOUNT:role/xilution-developer-role \
