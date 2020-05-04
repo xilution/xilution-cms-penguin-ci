@@ -7,7 +7,7 @@ phases:
       - cat ./xilution.yaml
       - echo $STAGE_NAME
       - export EXCLUDE=$(yq read ./xilution.yaml -j | jq -r '.tests.load.excludeStages[]? | @base64')
-      - if [[ $(echo EXCLUDE | awk '{print NF}') > 0 ]]; then for STAGE in $EXCLUDE; do if [[ $(echo $STAGE | base64 --decode | awk '{print tolower($0)}') == $STAGE_NAME ]]; then echo Stopping Build && aws codebuild stop-build --id ${CODEBUILD_BUILD_ID}; fi; done; fi
+      - if [[ $(echo EXCLUDE | awk '{print NF}') > 0 ]]; then for STAGE in $EXCLUDE; do if [[ $(echo $STAGE | base64 --decode | awk '{print tolower($0)}') == $STAGE_NAME ]]; then echo Skipping Stage && exit 0; fi; done; fi
       - |
         aws sts assume-role \
           --role-arn arn:aws:iam::$CLIENT_AWS_ACCOUNT:role/xilution-developer-role \
@@ -20,11 +20,9 @@ phases:
       - export WORDPRESS_SITE_BASE_URL=http://$LOAD_BALANCER_HOSTNAME/wordpress/$PENGUIN_PIPELINE_ID/$STAGE_NAME
       - echo $WORDPRESS_SITE_BASE_URL
       - timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' $WORDPRESS_SITE_BASE_URL)" != "200" ]]; do sleep 5; done' || false
-  build:
-    commands:
       - cd $CODEBUILD_SRC_DIR_SourceCode
       - export COMMANDS=$(yq read ./xilution.yaml -j | jq -r '.tests.load.commands[] | @base64')
-      - export NOT_FOUND_MESSAGE='No load test commands found.'
+      - export NOT_FOUND_MESSAGE='No test commands found.'
       - if [[ $(echo $COMMANDS | awk '{print NF}') > 0 ]]; then for COMMAND in $COMMANDS; do echo $COMMAND | base64 --decode | bash; done; else echo $NOT_FOUND_MESSAGE; fi
 
 artifacts:
