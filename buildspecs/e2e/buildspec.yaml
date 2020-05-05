@@ -6,6 +6,7 @@ phases:
       - ./scripts/prepare-test-build-env.sh $CLIENT_AWS_ACCOUNT xilution-developer-role
   build:
     commands:
+      - mkdir -p $CODEBUILD_SRC_DIR_SourceCode/output/e2e
       - ./scripts/run-tests.sh $CODEBUILD_SRC_DIR_SourceCode $STAGE_NAME ".tests.e2e.excludeStages[]?" ".tests.e2e.commands[]?"
 artifacts:
   files:
