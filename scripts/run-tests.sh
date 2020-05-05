@@ -4,9 +4,12 @@ set -x
 
 . ./scripts/common_functions.sh
 
-stageName=${1}
-pathToExcludeStages=${2}
-pathToTestCommands=${3}
+sourceDir=${1}
+stageName=${2}
+pathToExcludeStages=${3}
+pathToTestCommands=${4}
+
+cd "$sourceDir" || false
 
 excludeStages=$(yq read ./xilution.yaml -j | jq -r "$pathToExcludeStages | @base64")
 testCommands=$(yq read ./xilution.yaml -j | jq -r "$pathToTestCommands | @base64")
