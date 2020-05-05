@@ -25,7 +25,7 @@ export_skip_tests () {
 
   for stage in $excludeStages
   do
-    aStage=$(echo "$stage" | base64 --decode | awk "{print tolower($0)}")
+    aStage=$(echo "$stage" | base64 --decode | tr '[:upper:]' '[:lower:]')
     if [[ "$aStage" == "$theStage" ]]
     then
       SKIP_TESTS=1
