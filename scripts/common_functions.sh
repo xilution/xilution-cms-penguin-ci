@@ -68,7 +68,7 @@ wait_for_site_to_be_ready () {
   while [[ $(curl -s -o /dev/null -w '%{http_code}' "$wordpressSiteUrl") != "200" && "$count" < "$maxAttempts" ]]
   do
     sleep $sleepSeconds;
-    count=$(count+1);
+    count=$((count+1));
   done
 
   if [[ "$count" == "$maxAttempts" ]]
