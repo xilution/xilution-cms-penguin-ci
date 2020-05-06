@@ -12,5 +12,8 @@ phases:
           $CODEBUILD_SRC_DIR
   build:
     commands:
-      - helm tiller run tiller -- helm delete wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME
-      - helm tiller run tiller -- helm del --purge wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME
+      - |
+        ./scripts/run-tests.sh \
+          $PENGUIN_PIPELINE_ID \
+          $STAGE_NAME \
+          $CODEBUILD_SRC_DIR_SourceCode

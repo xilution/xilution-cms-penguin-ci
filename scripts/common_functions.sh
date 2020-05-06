@@ -2,11 +2,11 @@
 
 export_assume_role_credentials () {
 
-  awsAccount=${1}
+  awsAccountId=${1}
   awsRole=${2}
 
   aws sts assume-role \
-    --role-arn arn:aws:iam::"$awsAccount":role/"$awsRole" \
+    --role-arn arn:aws:iam::"$awsAccountId":role/"$awsRole" \
     --role-session-name xilution-client-session >./aws-creds.json
 
   awsAccessKeyId=$(cat <./aws-creds.json | jq -r ".Credentials.AccessKeyId")
@@ -56,6 +56,19 @@ update_kubeconfig () {
   k8sClusterName=${1}
 
   aws eks update-kubeconfig --name "$k8sClusterName"
+}
+
+init_terraform () {
+
+  penguinPipelineId=${1}
+  awsAccountId=${2}
+  srcDir=${3}
+
+  terraform init \
+    -backend-config="key=xilution-cms-penguin/$penguinPipelineId/terraform.tfstate" \
+    -backend-config="bucket=xilution-terraform-backend-state-bucket-$awsAccountId" \
+    -backend-config="dynamodb_table=xilution-terraform-backend-lock-table" \
+    "$srcDir"
 }
 
 wait_for_site_to_be_ready () {

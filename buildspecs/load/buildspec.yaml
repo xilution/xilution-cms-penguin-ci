@@ -1,9 +1,0 @@
-version: 0.2
-
-phases:
-  pre_build:
-    commands:
-      - ./scripts/prepare-test-build-env.sh $CLIENT_AWS_ACCOUNT xilution-developer-role
-  build:
-    commands:
-      - ./scripts/run-tests.sh $CODEBUILD_SRC_DIR_SourceCode $STAGE_NAME ".tests.load.excludeStages[]?" ".tests.load.commands[]?"

@@ -12,7 +12,13 @@ phases:
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   pre_build:
     commands:
-      - cat $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml
+      - |
+        ./scripts/pre-build.sh \
+          $CLIENT_AWS_ACCOUNT \
+          xilution-developer-role \
+          $K8S_CLUSTER_NAME \
+          $PENGUIN_PIPELINE_ID \
+          $CODEBUILD_SRC_DIR
       - export DOCKER_HUB_ACCOUNT_NAME=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml dockerHub.account`
       - export DOCKER_HUB_REPOSITORY_NAME=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml dockerHub.repository`
       - export IMAGE_VERSION=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml version`
