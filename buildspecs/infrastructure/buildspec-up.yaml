@@ -20,6 +20,7 @@ phases:
           $CODEBUILD_SRC_DIR
   build:
     commands:
+      - env
       - |
         terraform apply \
           -var="organization_id=$XILUTION_ORGANIZATION_ID" \
