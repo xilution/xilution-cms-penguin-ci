@@ -7,7 +7,6 @@ set -x
 organizationId=${1}
 penguinPipelineId=${2}
 stageName=${3}
-jobId=$(uuidgen)
 sourceDir=${4}
 
 cd "$sourceDir" || false
@@ -17,6 +16,7 @@ seedDetails=$(yq read ./xilution.yaml -j | jq -r ".data.seed[]? | @base64")
 for detail in $seedDetails; do
   source=$(echo "$detail" | base64 --decode | jq -r ".source")
   target=$(echo "$detail" | base64 --decode | jq -r ".target")
+  jobId=$(uuidgen)
 
   cat <<EOF >./seed-job.yaml
 ---
