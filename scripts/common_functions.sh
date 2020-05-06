@@ -64,11 +64,16 @@ init_terraform () {
   awsAccountId=${2}
   srcDir=${3}
 
-  terraform init \
-    -backend-config="key=xilution-cms-penguin/$penguinPipelineId/terraform.tfstate" \
-    -backend-config="bucket=xilution-terraform-backend-state-bucket-$awsAccountId" \
-    -backend-config="dynamodb_table=xilution-terraform-backend-lock-table" \
-    "$srcDir"
+  if hash terraform 2>/dev/null
+  then
+    terraform init \
+      -backend-config="key=xilution-cms-penguin/$penguinPipelineId/terraform.tfstate" \
+      -backend-config="bucket=xilution-terraform-backend-state-bucket-$awsAccountId" \
+      -backend-config="dynamodb_table=xilution-terraform-backend-lock-table" \
+      "$srcDir"
+  else
+    echo "Cannot initialize Terraform because terraform command not found."
+  fi
 }
 
 wait_for_site_to_be_ready () {
