@@ -53,6 +53,7 @@ spec:
           claimName: wp-efs-claim
   ttlSecondsAfterFinished: 120
 EOF
+  cat seed-job.yaml
   kubectl apply -f seed-job.yaml
   rm -rf seed-job.yaml
 done
