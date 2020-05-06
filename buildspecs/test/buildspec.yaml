@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - |
-        ./scripts/pre-build.sh \
+        . ./scripts/pre-build.sh \
           $CLIENT_AWS_ACCOUNT \
           xilution-developer-role \
           $K8S_CLUSTER_NAME \
