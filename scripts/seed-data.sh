@@ -2,8 +2,6 @@
 
 set -x
 
-. ./scripts/common_functions.sh
-
 organizationId=${1}
 penguinPipelineId=${2}
 stageName=${3}
