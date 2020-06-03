@@ -67,7 +67,7 @@ export AWS_REGION=$CLIENT_AWS_REGION
 
 ## Initialize terraform
 
-Run `make init`
+Run `make infrastructure-init`
 
 ## Verify terraform
 

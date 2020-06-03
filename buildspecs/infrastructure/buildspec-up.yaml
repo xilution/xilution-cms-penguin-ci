@@ -32,4 +32,4 @@ phases:
           -var="docker_username=$DOCKER_USERNAME" \
           -var="docker_password=$DOCKER_PASSWORD" \
           -auto-approve \
-          $CODEBUILD_SRC_DIR
+          $CODEBUILD_SRC_DIR/terraform/infrastructure

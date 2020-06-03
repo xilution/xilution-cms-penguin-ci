@@ -9,7 +9,8 @@ infrastructure-plan:
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="penguin_pipeline_id=$(PENGUIN_PIPELINE_ID)" \
 		-var="giraffe_pipeline_id=$(GIRAFFE_PIPELINE_ID)" \
-		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
+		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)" \
+		terraform/infrastructure
 
 infrastructure-destroy:
 	terraform destroy \
@@ -22,13 +23,10 @@ infrastructure-destroy:
 		-var="master_password=nonsense" \
 		-var="docker_username=nonsense" \
 		-var="docker_password=nonsense" \
-		-auto-approve
+		-auto-approve \
+		terraform/infrastructure
 
-uninstall-wordpress:
-	helm tiller run tiller -- helm delete wordpress-$(PENGUIN_PIPELINE_ID)-$(STAGE_NAME)
-	helm tiller run tiller -- helm del --purge wordpress-$(PENGUIN_PIPELINE_ID)-$(STAGE_NAME)
-
-init:
+infrastructure-init:
 	terraform init \
 		-backend-config="key=xilution-cms-penguin/$(PENGUIN_PIPELINE_ID)/terraform.tfstate" \
 		-backend-config="bucket=xilution-terraform-backend-state-bucket-$(CLIENT_AWS_ACCOUNT)" \
@@ -36,7 +34,12 @@ init:
 		-var="organization_id=$(XILUTION_ORGANIZATION_ID)" \
 		-var="penguin_pipeline_id=$(PENGUIN_PIPELINE_ID)" \
 		-var="giraffe_pipeline_id=$(GIRAFFE_PIPELINE_ID)" \
-		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)"
+		-var="client_aws_account=$(CLIENT_AWS_ACCOUNT)" \
+		terraform/infrastructure
+
+uninstall-wordpress:
+	helm tiller run tiller -- helm delete wordpress-$(PENGUIN_PIPELINE_ID)-$(STAGE_NAME)
+	helm tiller run tiller -- helm del --purge wordpress-$(PENGUIN_PIPELINE_ID)-$(STAGE_NAME)
 
 submodules-init:
 	git submodule update --init

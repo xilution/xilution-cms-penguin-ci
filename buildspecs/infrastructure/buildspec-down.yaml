@@ -24,4 +24,4 @@ phases:
           -var="docker_username=nonsense" \
           -var="docker_password=nonsense" \
           -auto-approve \
-          $CODEBUILD_SRC_DIR
+          $CODEBUILD_SRC_DIR/terraform/infrastructure
