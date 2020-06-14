@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - |
+        . ./scripts/pre-build.sh \
+          $CLIENT_AWS_ACCOUNT \
+          xilution-developer-role \
+          $K8S_CLUSTER_NAME \
+          $PENGUIN_PIPELINE_ID \
+          $CODEBUILD_SRC_DIR
+  build:
+    commands:
+      - |
+        terraform destroy \
+          -var="penguin_pipeline_id=$PENGUIN_PIPELINE_ID" \
+
+#TODO: configure for github
