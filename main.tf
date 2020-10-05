@@ -20,7 +20,7 @@ resource "null_resource" "k8s_configure" {
     command = "/bin/bash ${path.module}/scripts/install-db-secret.sh ${var.master_password}"
   }
   provisioner "local-exec" {
-    command = "/bin/bash ${path.module}/scripts/install-regcred-secret.sh ${var.docker_username} ${var.docker_password}"
+    command    = "/bin/bash ${path.module}/scripts/install-regcred-secret.sh ${var.docker_username} ${var.docker_password}"
     on_failure = "continue"
   }
   provisioner "local-exec" {
@@ -41,25 +41,25 @@ resource "aws_s3_bucket" "k8s_data_transfer_bucket" {
 # Metrics
 
 resource "aws_lambda_permission" "allow-penguin-cloudwatch-every-ten-minute-event-rule" {
-  action = "lambda:InvokeFunction"
+  action        = "lambda:InvokeFunction"
   function_name = data.aws_lambda_function.metrics-reporter-lambda.function_name
-  principal = "events.amazonaws.com"
-  source_arn = aws_cloudwatch_event_rule.penguin-cloudwatch-every-ten-minute-event-rule.arn
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.penguin-cloudwatch-every-ten-minute-event-rule.arn
 }
 
 resource "aws_cloudwatch_event_rule" "penguin-cloudwatch-every-ten-minute-event-rule" {
-  name = "xilution-penguin-${substr(var.penguin_pipeline_id, 0, 8)}-cloudwatch-event-rule"
+  name                = "xilution-penguin-${substr(var.penguin_pipeline_id, 0, 8)}-cloudwatch-event-rule"
   schedule_expression = "rate(10 minutes)"
-  role_arn = data.aws_iam_role.cloudwatch-events-rule-invocation-role.arn
+  role_arn            = data.aws_iam_role.cloudwatch-events-rule-invocation-role.arn
   tags = {
     xilution_organization_id = var.organization_id
-    originator = "xilution.com"
+    originator               = "xilution.com"
   }
 }
 
 resource "aws_cloudwatch_event_target" "penguin-cloudwatch-event-target" {
-  rule = aws_cloudwatch_event_rule.penguin-cloudwatch-every-ten-minute-event-rule.name
-  arn = data.aws_lambda_function.metrics-reporter-lambda.arn
+  rule  = aws_cloudwatch_event_rule.penguin-cloudwatch-every-ten-minute-event-rule.name
+  arn   = data.aws_lambda_function.metrics-reporter-lambda.arn
   input = <<-DOC
   {
     "Environment": "prod",
