@@ -1,5 +1,1 @@
 .idea
-.terraform
-.terraform.tfstate.lock.info
-properties.txt
-env.sh

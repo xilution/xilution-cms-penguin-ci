@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 # reference: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 

@@ -14,17 +14,17 @@ resource "null_resource" "k8s_configure" {
     command = "aws eks update-kubeconfig --name ${var.k8s_cluster_name}"
   }
   provisioner "local-exec" {
-    command = "/bin/bash ${path.module}/scripts/install-namespaces.sh"
+    command = "/bin/bash ${path.module}/../../scripts/install-namespaces.sh"
   }
   provisioner "local-exec" {
-    command = "/bin/bash ${path.module}/scripts/install-db-secret.sh ${var.master_password}"
+    command = "/bin/bash ${path.module}/../../scripts/install-db-secret.sh ${var.master_password}"
   }
   provisioner "local-exec" {
-    command    = "/bin/bash ${path.module}/scripts/install-regcred-secret.sh ${var.docker_username} ${var.docker_password}"
+    command    = "/bin/bash ${path.module}/../../scripts/install-regcred-secret.sh ${var.docker_username} ${var.docker_password}"
     on_failure = "continue"
   }
   provisioner "local-exec" {
-    command = "/bin/bash ${path.module}/scripts/install-wp-persistent-volumn-claim.sh"
+    command = "/bin/bash ${path.module}/../../scripts/install-wp-persistent-volumn-claim.sh"
   }
 }
 

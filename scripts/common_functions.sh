@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 export_assume_role_credentials () {
 
