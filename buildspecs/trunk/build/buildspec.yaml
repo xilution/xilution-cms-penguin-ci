@@ -19,9 +19,9 @@ phases:
           $K8S_CLUSTER_NAME \
           $PENGUIN_PIPELINE_ID \
           $CODEBUILD_SRC_DIR
-      - export DOCKER_HUB_ACCOUNT_NAME=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml dockerHub.account`
-      - export DOCKER_HUB_REPOSITORY_NAME=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml dockerHub.repository`
-      - export IMAGE_VERSION=`yq r $CODEBUILD_SRC_DIR_SourceCode/xilution.yaml version`
+      - export DOCKER_HUB_ACCOUNT_NAME=`jq -r ".dockerHub.account" <$CODEBUILD_SRC_DIR_SourceCode/xilution.yaml`
+      - export DOCKER_HUB_REPOSITORY_NAME=`jq -r ".dockerHub.repository" <$CODEBUILD_SRC_DIR_SourceCode/xilution.yaml`
+      - export IMAGE_VERSION=`jq -r ".version" <$CODEBUILD_SRC_DIR_SourceCode/xilution.yaml`
   build:
     commands:
       - docker build -t xilution/$DOCKER_HUB_REPOSITORY_NAME $CODEBUILD_SRC_DIR_SourceCode

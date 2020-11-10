@@ -14,7 +14,7 @@ wait_for_site_to_be_ready "$WORDPRESS_SITE_URL"
 
 cd "$sourceDir" || false
 
-testDetails=$(yq read ./xilution.yaml -j | jq -r ".tests[]? | @base64")
+testDetails=$(jq -r ".tests[]? | @base64" <./xilution.json)
 
 for testDetail in $testDetails; do
   commands=$(echo "$testDetail" | jq -r ".commands? | @base64")

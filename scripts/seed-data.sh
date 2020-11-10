@@ -9,7 +9,7 @@ sourceDir=${4}
 
 cd "$sourceDir" || false
 
-seedDetails=$(yq read ./xilution.yaml -j | jq -r ".data.seed[]? | @base64")
+seedDetails=$(jq -r ".data.seed[]? | @base64" <./xilution.json)
 
 for detail in $seedDetails; do
   source=$(echo "$detail" | base64 --decode | jq -r ".source")
