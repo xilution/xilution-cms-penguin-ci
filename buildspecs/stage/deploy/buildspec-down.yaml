@@ -3,14 +3,8 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - |
-        . ./scripts/pre-build.sh \
-          $CLIENT_AWS_ACCOUNT \
-          xilution-developer-role \
-          $K8S_CLUSTER_NAME \
-          $PENGUIN_PIPELINE_ID \
-          $CODEBUILD_SRC_DIR
+      - . ./scripts/assume-role.sh
+      - ./scripts/update-kubeconfig.sh
   build:
     commands:
-      - helm tiller run tiller -- helm delete wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME
-      - helm tiller run tiller -- helm del --purge wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME
+      - ./scripts/deploy-down.sh

@@ -3,23 +3,8 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - |
-        . ./scripts/pre-build.sh \
-          $CLIENT_AWS_ACCOUNT \
-          xilution-developer-role \
-          $K8S_CLUSTER_NAME \
-          $PENGUIN_PIPELINE_ID \
-          $CODEBUILD_SRC_DIR
+      - . ./scripts/assume-role.sh
+      - ./scripts/update-kubeconfig.sh
   build:
     commands:
-      - export LOAD_BALANCER_HOSTNAME=`kubectl get services/ingress-nginx -n ingress-nginx -o json | jq -r '.status.loadBalancer.ingress[0].hostname'`
-      - |
-        helm tiller run tiller -- helm upgrade \
-          --install \
-          --force \
-          --namespace wordpress \
-          --set mysql.name=wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME \
-          --set host=$LOAD_BALANCER_HOSTNAME \
-          --set path=/wordpress/$PENGUIN_PIPELINE_ID/$STAGE_NAME \
-          --values $CODEBUILD_SRC_DIR_BuildDeployImage/image.yaml \
-          wordpress-$PENGUIN_PIPELINE_ID-$STAGE_NAME $CODEBUILD_SRC_DIR/helm/wordpress
+      - ./scripts/deploy-up.sh

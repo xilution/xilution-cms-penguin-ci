@@ -2,10 +2,10 @@
 
 set -x
 
-organizationId=${1}
-penguinPipelineId=${2}
-stageName=${3}
-sourceDir=${4}
+organizationId=${XILUTION_ORGANIZATION_ID}
+penguinPipelineId=${PENGUIN_PIPELINE_ID}
+stageName=${STAGE_NAME}
+sourceDir=${CODEBUILD_SRC_DIR_SourceCode}
 
 cd "$sourceDir" || false
 

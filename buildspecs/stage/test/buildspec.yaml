@@ -1,19 +1,9 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - |
-        . ./scripts/pre-build.sh \
-          $CLIENT_AWS_ACCOUNT \
-          xilution-developer-role \
-          $K8S_CLUSTER_NAME \
-          $PENGUIN_PIPELINE_ID \
-          $CODEBUILD_SRC_DIR
+  install:
+    runtime-versions:
+      nodejs: 12
   build:
     commands:
-      - |
-        ./scripts/run-tests.sh \
-          $PENGUIN_PIPELINE_ID \
-          $STAGE_NAME \
-          $CODEBUILD_SRC_DIR_SourceCode
+      - ./scripts/test.sh
