@@ -21,7 +21,7 @@ resource "null_resource" "k8s_configure" {
   }
   provisioner "local-exec" {
     command    = "/bin/bash ${path.module}/../../scripts/install-regcred-secret.sh ${var.docker_username} ${var.docker_password}"
-    on_failure = "continue"
+    on_failure = continue
   }
   provisioner "local-exec" {
     command = "/bin/bash ${path.module}/../../scripts/install-wp-persistent-volumn-claim.sh"
