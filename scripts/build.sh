@@ -15,11 +15,11 @@ docker tag "${dockerHubAccountName}"/"${dockerHubRepoName}" "${dockerHubAccountN
 docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 docker push "${dockerHubAccountName}"/"${dockerHubRepoName}"
 
+cd "${currentDir}" || false
+
 cat <<EOF >image.yaml
 wordpress:
   image:
     repository: $dockerHubAccountName/$dockerHubRepoName
     tag: $imageVersion
 EOF
-
-cd "${currentDir}" || false
