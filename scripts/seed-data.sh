@@ -9,11 +9,11 @@ sourceDir=${CODEBUILD_SRC_DIR_SourceCode}
 
 cd "$sourceDir" || false
 
-seedDetails=$(jq -r ".data.seed[]? | @base64" <./xilution.json)
+seedMappings=$(jq -r ".data.seed.mappings[]? | @base64" <./xilution.json)
 
-for detail in $seedDetails; do
-  source=$(echo "$detail" | base64 --decode | jq -r ".source")
-  target=$(echo "$detail" | base64 --decode | jq -r ".target")
+for seedMapping in $seedMappings; do
+  source=$(echo "$seedMapping" | base64 --decode | jq -r ".source")
+  target=$(echo "$seedMapping" | base64 --decode | jq -r ".target")
   jobId=$(uuidgen)
 
   cat <<EOF >./seed-job.yaml
