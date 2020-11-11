@@ -5,9 +5,9 @@ sourceDir=${CODEBUILD_SRC_DIR_SourceCode}
 currentDir=$(pwd)
 cd "${sourceDir}" || false
 
-export dockerHubAccountName=$(jq -r ".dockerHub.account" <./xilution.yaml)
-export dockerHubRepoName=$(jq -r ".dockerHub.repository" <./xilution.yaml)
-export imageVersion=$(jq -r ".version" <./xilution.yaml)
+export dockerHubAccountName=$(jq -r ".dockerHub.account" <./xilution.json)
+export dockerHubRepoName=$(jq -r ".dockerHub.repository" <./xilution.json)
+export imageVersion=$(jq -r ".version" <./xilution.json)
 
 docker build -t xilution/"${dockerHubRepoName}" "${sourceDir}"
 
