@@ -5,6 +5,9 @@ pipelineId=${PENGUIN_PIPELINE_ID}
 stageName=${STAGE_NAME}
 loadBalancerHostname=$(kubectl get services/ingress-nginx -n ingress-nginx -o json | jq -r '.status.loadBalancer.ingress[0].hostname')
 
+echo "the contents of the build dir is:"
+ls "${buildDir}"
+
 helm tiller run tiller -- helm upgrade \
   --install \
   --force \
