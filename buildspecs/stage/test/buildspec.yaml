@@ -8,3 +8,6 @@ phases:
   build:
     commands:
       - ./scripts/test.sh
+artifacts:
+  files:
+    - output/**/*
