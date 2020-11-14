@@ -2,18 +2,12 @@
 
 . ./scripts/common_functions.sh
 
-pipelineId=${PENGUIN_PIPELINE_ID}
 stageName=${STAGE_NAME}
-stageNameLower=$(echo "${stageName}" | tr '[:upper:]' '[:lower:]')
 sourceDir=${CODEBUILD_SRC_DIR_SourceCode}
+siteBaseUrl=${SITE_BASE_URL}
 
-loadBalancerHostName=$(kubectl get services/ingress-nginx -n ingress-nginx -o json | jq -r ".status.loadBalancer.ingress[0].hostname")
-siteUrl="http://${loadBalancerHostName}/wordpress/${pipelineId:0:8}/${stageNameLower}"
-export WORDPRESS_SITE_BASE_URL=${siteUrl}
+wait_for_site_to_be_ready "${siteBaseUrl}"
 
-wait_for_site_to_be_ready "${siteUrl}"
-
-currentDir=$(pwd)
 cd "${sourceDir}" || false
 
 testDetails=$(jq -r ".tests.${stageName}[] | @base64" <./xilution.json)
@@ -24,5 +18,3 @@ for testDetail in ${testDetails}; do
   commands=$(echo "${testDetail}" | base64 --decode | jq -r ".commands[]? | @base64")
   execute_commands "${commands}"
 done
-
-cd "${currentDir}" || false

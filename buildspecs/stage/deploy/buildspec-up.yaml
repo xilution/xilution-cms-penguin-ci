@@ -1,5 +1,9 @@
 version: 0.2
 
+env:
+  exported-variables:
+    - SITE_BASE_URL
+
 phases:
   pre_build:
     commands:
@@ -8,3 +12,4 @@ phases:
   build:
     commands:
       - ./scripts/deploy-up.sh
+      - . ./scripts/export-site-base-url.sh
