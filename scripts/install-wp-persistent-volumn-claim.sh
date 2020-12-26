@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 cat <<EOF >./persistent-volumn-claim.yaml
 ---

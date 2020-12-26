@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 buildDir=${CODEBUILD_SRC_DIR_BuildDeployImage}
 pipelineId=${PENGUIN_PIPELINE_ID}

@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 pipelineId=${PENGUIN_PIPELINE_ID}
 stageName=${STAGE_NAME}

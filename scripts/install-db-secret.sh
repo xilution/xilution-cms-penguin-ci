@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 WORDPRESS_DB_PASSWORD=$1
 

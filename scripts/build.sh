@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 sourceDir=${CODEBUILD_SRC_DIR_SourceCode}
 commitId=${COMMIT_ID}

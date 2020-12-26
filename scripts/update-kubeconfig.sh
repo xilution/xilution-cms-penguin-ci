@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 k8sClusterName=${K8S_CLUSTER_NAME}
 
